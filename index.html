@@ -1,0 +1,190 @@
+<!DOCTYPE html> <!-- nodo raíz del documento HTML, indica que el documento es HTML5 -->  
+<html>
+    <head> <!-- nodo que contiene metadatos sobre el documento, como su título, enlaces a hojas de estilo, scripts, etc. Nada de esto se renderiza-->
+    <meta charset="UTF-8"> <!-- define la codificación de caracteres del documento -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- hace que el sitio web sea responsive, ajustando su diseño a diferentes tamaños de pantalla -->
+    
+    <!--CEO-->
+    <title>Portafolio Monreal 💻</title> <!-- define el título del documento, que se muestra en la pestaña del navegador o en CEO de Google-->
+    <meta name="description" content="Portafolio de Monreal, desarrollador web y diseñador gráfico. Aquí encontrarás una selección de mis proyectos y experiencia en el campo del desarrollo web y diseño gráfico."> <!-- proporciona una descripción del contenido de la página para los motores de búsqueda -->
+    <link rel="canonical" href="https://monreal.dev"> <!-- especifica la URL canónica de la página para evitar problemas de contenido duplicado -->
+    <link rel="alternate" href="https://monreal.dev/en" hreflang="es-GB"> <!-- indica la versión alternativa de la página para diferentes idiomas o regiones -->
+    <!--open graph-->
+    <meta property="og:title" content="Portafolio Monreal 💻">
+    <meta property="og:description" content="Portafolio de desarrollador de softwarey diseñador gráfico.">
+    <meta property="og:image" content="/images/imagen.jpg" alt="foto de monreal">
+    <meta property="og:url" content="https://monreal.dev">
+    <!--/open graph-->
+
+    <link rel="stylesheet" href="/styles/style.css"> <!-- enlaza una hoja de estilo externa para aplicar estilos al documento -->
+    <meta name="robots" content="index, follow"> <!-- indica a los motores de búsqueda que indexen la página y sigan los enlaces -->
+    <meta name="theme-color" content="#09f"> <!-- define el color del tema para navegadores móviles -->
+    <link rel="icon" type="image/png" href="/images/icono.png"> <!-- define el icono que se muestra en la pestaña del navegador -->
+    <style>
+        main {
+        background-color: #edf8ff;
+        border-radius: 10px;
+        padding: 20px;
+        padding-top: 10px;
+        }
+        header, footer {
+        background-color: #edf8ff;
+        padding-left: 20px;
+        padding-bottom: 20px;
+        border-radius: 10px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        }
+    </style>
+    </head>
+
+
+    <body>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Portafolio Monreal 💻</title>
+    <header align="center"> <!-- nodo que representa el encabezado de un documento o sección, utilizado para contener elementos como el título, el logo, la navegación principal, etc.-->
+        <h1>Portafolio Monreal 💻</h1>
+
+        <nav><!--nodo de navegación-->
+            <a href="#proyectos">Proyectos</a> <!--nodo de enlace, utilizado para crear hipervínculos a otras páginas o secciones dentro del mismo documento con id-->
+            <a href="#experiencia">Experiencia</a>
+            <a href="#contacto">Contacto</a>
+            <a href="https://mx.pinterest.com/joaquinomonreal/"
+                    target="_blank"
+                    rel="noreferrer" 
+                    >Pinterest</a>
+                    <!--target="_blank" abre link en pestaña nueva / noreferrer seguridad al abrir enlaces externos-->
+            </ul>
+        </nav>
+    </header>
+    <main> <!-- nodo que representa el contenido principal del documento, utilizado para agrupar el contenido central y relevante de la página LO QUE CAMBIA EN CADA PAGINA-->
+    <p>Bienvenido a mi portafolio. Aquí encontrarás una selección de mis proyectos y trabajos más destacados. <strong> Mi objetivo es mostrar mis habilidades y experiencia en el campo del desarrollo web, diseño gráfico y otras áreas relacionadas.</strong> Si estás interesado en colaborar o tienes alguna pregunta, no dudes en contactarme.</p>
+    
+    <video src="images/sample_960x400_ocean_with_audio.mp4" controls autoplay muted width="100%"></video>
+    <audio src="https://filesamples.com/samples/audio/mp3/Symphony%20No.6%20(1st%20movement).mp3" controls style="display: block;"></audio> <!--podrias usar hidden para tenerlo de fondo-->
+    <h2 id="proyectos">Proyectos Destacados</h2>
+    <h2 id="experiencia">Experiencia</h2>
+    <!--unorder list --><ul> 
+    <!--list item--><li><strong>Desarrollador Web en XYZ Company</strong> (2020 - Presente): Responsable del desarrollo y mantenimiento de sitios web utilizando tecnologías como HTML, CSS, JavaScript y frameworks como React.</li>
+    <li><strong>Diseñador Gráfico Freelance</strong> (2018 - 2020): Creación de logotipos, material promocional y diseño de interfaces para clientes diversos.</li>
+    </ul>
+
+    <h2 id="tecnologías"> Mis tecnologías</h2>
+    <ol type="1" reversed start="4"> <!--ol ordenada, type="A" para numeración con letras mayúsculas-->
+    <li>HTML5</li>
+    <li>CSS3</li>
+    <li value="1">JavaScript</li>
+    </ol>
+    <dialog id="dialog">
+        <h1>¡Hola!</h1>
+        <p>Este es un diálogo de ejemplo.</p>
+        <button id="hide">Cerrar modal</button>
+    </dialog>
+    <button id="show">Ver mas información</button>
+    <script><!-- window.show, show es el id asignado al boton ver mas...-->
+        window.show.addEventListener('click', () => {
+            window.dialog.showModal();
+        });
+
+        window.hide.addEventListener('click', () => {
+            window.dialog.close();
+        });
+    </script>
+
+    <section><!-- nodo que representa una sección genérica de contenido dentro de un documento, utilizada para agrupar contenido relacionado y estructurar la página de manera lógica-->
+        <article><!-- nodo que representa un artículo independiente dentro de un documento, como una publicación de blog, una noticia o una sección de contenido que sigue teniendo sentido si la extraes unitariamente-->
+            <header>
+                <h4> Sitio Web Corporativo</h4>
+            </header>
+            <p>Descripción del proyecto...</p>
+            <footer><!-- nodo que representa el pie de página de un artículo o sección, utilizado para contener información adicional, como autor, fecha de publicación, enlaces relacionados, etc.-->
+                <small><!--contenido anexo o de pie de página-->Tecnologias utilizadas: HTML, CSS, JavaScript</small>
+            </footer>
+        </article>
+    </section>
+    
+    <section>
+        <h2>Preguntas Frecuentes</h2>
+        <details open>
+            <summary>Que has estudiado?</summary>
+            <p>He estudiado programación, diseño web y desarrollo de software en Hybridge education y de manera autodidacta.</p>
+        </details>
+        <details>
+            <summary>¿Cuales son tus hobbies?</summary>
+            <p>Me gustan los deportes, la lectura y la programación.</p>
+        </details>
+    </section>
+    <section>
+        <h2>Formulario de contacto</h2>
+        <form method="post" action="/"><!--Regularmente usariamos algo como action="/enviar-formulario"-->
+            <fieldset>
+                <legend>Información personal</legend>
+
+                <label for="nombre">Nombre:</label> <!-- for asocia la etiqueta con el input correspondiente, mejorando la accesibilidad-->
+                <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre completo" required><!--required hace que el campo sea obligatorio, placeholder muestra un texto de ejemplo dentro del campo-->
+
+                <label>Email:
+                <input type="email" id="email" name="email" placeholder="Ingresa tu email" required>
+                </label>
+
+                <label style="display: block;">Numero Telefonico:
+                <input type="tel" id="telefono" name="telefono" placeholder="Ingresa tu número de teléfono" pattern="[0-9]" required>
+                </label><!--style="display: block;" hace el brinco de linea en el formulario sin necesidad de usar div-->
+            </fieldset>
+            <fieldset>
+                <legend>otros</legend>
+                <label for="asunto">Asunto:</label>
+                <select id="asunto" name="asunto">
+                    <option value="consulta">Consulta</option>
+                    <option value="colaboracion">Colaboración</option>
+                    <option value="otro">Otro</option>
+                </select>
+
+                <label for="terms" style="display: block;">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    Acepto los términos y condiciones
+                </label>
+
+                <datalist id="languajes"> <!--datalist proporciona una lista de opciones predefinidas para un campo de entrada, permitiendo al usuario seleccionar una opción o escribir su propia entrada, tambien le muestra opciones de autocompletado-->
+                    <option value="JavaScript"></option>
+                    <option value="Python"></option>
+                    <option value="Java"></option>
+                </datalist>
+                <label style="display: block;">
+                    Lenguaje con que te gustaria trabajar:
+                <input list="languajes" name="languajes" placeholder="Selecciona o escribe un lenguaje">
+                </label>
+
+            </fieldset>
+            <fieldset>
+                <legend>Información adicional</legend>
+                <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" name="mensaje" rows="4" cols="50"></textarea>
+            </fieldset>
+
+            <input type="submit" value="Enviar">
+        </form>
+    </section>
+    </main>
+ 
+ 
+ 
+<!-- Elementos reemplazables no necesitan etiqueta de cierre (img, inputs,etc)-->
+    <img src="/images/img.png" loading="lazy" alt="Imagen de 222 likes" width="100%" ><!--loading="lazy" carga la imagen solo cuando es visible en la pantalla o al menos con menos prioridad-->
+    <input type="color" value="#ff8000">
+
+    <a download href="images/img.png"><img src="/images/img.png" alt="Imagen de 222 likes" width="100%" ></a>
+    
+    <iframe width="100%" height="auto" aspect-ratio="16/9" src="https://www.youtube.com/embed/3nYLTiY5skU?si=oGqTH2YQRck4Vj57" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    
+    <footer>
+    <a href="joaquinomonreal@gmail.com">Enviar correo</a>
+    <a href="tel:+528111704209">Llamar</a>
+    <a href="https://wa.me/8111704209" target="_blank" rel="noreferrer">WhatsApp</a>
+    copyright © 2023 Mi Portafolio. Todos los derechos reservados.
+    </footer>
+
+    </body>
+    </html>

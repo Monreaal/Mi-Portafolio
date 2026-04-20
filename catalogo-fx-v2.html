@@ -1,0 +1,3426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VISUAL FX CATALOG — 50 Efectos Industriales</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════
+   TOKENS & RESET
+══════════════════════════════════════════════ */
+:root {
+  --bg:       #080810;
+  --surface:  #0f0f1a;
+  --border:   rgba(255,255,255,0.07);
+  --text:     #e8e4dc;
+  --muted:    rgba(232,228,220,0.4);
+  --acid:     #c8ff00;
+  --hot:      #ff2d55;
+  --cyan:     #00e5ff;
+  --violet:   #8b5cf6;
+  --gold:     #f59e0b;
+  --coral:    #ff6b6b;
+  --mint:     #0fffe5;
+  --r: 0.75rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ══════════════════════════════════════════════
+   CUSTOM CURSOR
+══════════════════════════════════════════════ */
+#cursor-dot {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--acid);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s, background 0.2s;
+  mix-blend-mode: difference;
+}
+#cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1.5px solid rgba(200,255,0,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: width 0.3s, height 0.3s, border-color 0.3s, transform 0.08s;
+}
+body:has(a:hover) #cursor-ring,
+body:has(button:hover) #cursor-ring,
+body:has(.fx-card:hover) #cursor-ring {
+  width: 60px; height: 60px;
+  border-color: var(--hot);
+}
+
+/* ══════════════════════════════════════════════
+   NAV PILL
+══════════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 1.5rem; left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  background: rgba(8,8,16,0.6);
+  backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+}
+nav a {
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.3rem 0.7rem;
+  border-radius: 100px;
+  transition: color 0.2s, background 0.2s;
+}
+nav a:hover { color: var(--text); background: rgba(255,255,255,0.07); }
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: var(--acid);
+  margin-right: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+/* ══════════════════════════════════════════════
+   PROGRESS BAR
+══════════════════════════════════════════════ */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--acid), var(--cyan));
+  z-index: 200;
+  width: 0%;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--acid);
+}
+
+/* ══════════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════════ */
+.chapter {
+  padding: 8rem 2rem 5rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.chapter-header {
+  display: flex;
+  align-items: baseline;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.5rem;
+}
+.chapter-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--acid);
+  letter-spacing: 0.2em;
+  white-space: nowrap;
+}
+.chapter-title {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.chapter-desc {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 700px;
+  margin-bottom: 3rem;
+}
+
+.fx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 1.5rem;
+}
+.fx-grid-wide { grid-template-columns: 1fr; }
+.fx-grid-2    { grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); }
+.fx-grid-3    { grid-template-columns: repeat(3, 1fr); }
+
+@media(max-width:900px) {
+  .fx-grid, .fx-grid-2, .fx-grid-3 { grid-template-columns: 1fr; }
+}
+
+.fx-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.fx-card:hover { border-color: rgba(200,255,0,0.2); transform: translateY(-3px); }
+.fx-demo {
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.fx-info {
+  padding: 1.25rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.fx-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.4rem;
+}
+.fx-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 3px;
+  background: rgba(200,255,0,0.08);
+  color: var(--acid);
+  border: 1px solid rgba(200,255,0,0.2);
+  margin-bottom: 0.6rem;
+  margin-right: 0.3rem;
+}
+.fx-tag.t-js     { background: rgba(245,158,11,0.08); color: var(--gold);   border-color: rgba(245,158,11,0.2); }
+.fx-tag.t-css    { background: rgba(0,229,255,0.08);  color: var(--cyan);   border-color: rgba(0,229,255,0.2);  }
+.fx-tag.t-scroll { background: rgba(139,92,246,0.08); color: var(--violet); border-color: rgba(139,92,246,0.2); }
+.fx-desc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.divider-line {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border), transparent);
+  margin: 0 2rem;
+}
+
+/* ══════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════ */
+#hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 120%, rgba(139,92,246,0.2), transparent),
+              radial-gradient(ellipse 60% 40% at 20% 50%, rgba(0,229,255,0.08), transparent),
+              radial-gradient(ellipse 50% 50% at 80% 30%, rgba(200,255,0,0.06), transparent);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+.hero-content { position: relative; z-index: 2; text-align: center; }
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  color: var(--acid);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: heroIn 0.8s ease 0.2s forwards;
+}
+.hero-h1 {
+  font-size: clamp(4.5rem, 14vw, 13rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  opacity: 0;
+  animation: heroIn 0.8s ease 0.4s forwards;
+}
+.hero-h1 span {
+  display: block;
+  background: linear-gradient(135deg, #fff 0%, var(--acid) 40%, var(--cyan) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-h1 em {
+  display: block;
+  font-style: normal;
+  color: rgba(255,255,255,0.12);
+  -webkit-text-fill-color: initial;
+}
+.hero-sub {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  color: var(--muted);
+  margin-top: 2rem;
+  opacity: 0;
+  animation: heroIn 0.8s ease 0.6s forwards;
+}
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 3rem;
+  opacity: 0;
+  animation: heroIn 0.8s ease 0.8s forwards;
+}
+.hero-stat-num {
+  font-size: 2rem; font-weight: 800;
+  background: linear-gradient(to bottom, #fff, var(--muted));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+@keyframes heroIn { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform:none; } }
+
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.3em; color: var(--muted);
+  animation: heroIn 1s ease 1.2s both;
+}
+.hero-scroll-line {
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, var(--acid), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+/* ══════════════════════════════════════════════
+   FX 01 — GLASSMORPHISM
+══════════════════════════════════════════════ */
+.glass-scene {
+  width: 100%; height: 340px;
+  background: linear-gradient(135deg, #1a0040, #003a4a, #2a1000);
+  position: relative;
+  overflow: hidden;
+}
+.glass-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  animation: blobDrift 8s ease-in-out infinite;
+}
+.gb1 { width:280px;height:280px; background:rgba(139,92,246,0.6); top:-60px; left:-40px; }
+.gb2 { width:220px;height:220px; background:rgba(0,229,255,0.5); bottom:-40px; right:10%; animation-delay:-3s; animation-duration:10s; }
+.gb3 { width:180px;height:180px; background:rgba(255,45,85,0.4); top:30%; right:20%; animation-delay:-6s; }
+@keyframes blobDrift {
+  0%,100%{transform:translate(0,0)}
+  33%{transform:translate(20px,-30px)}
+  66%{transform:translate(-15px,20px)}
+}
+.glass-panel {
+  position: absolute;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px) saturate(1.8);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+  transition: transform 0.3s;
+}
+.glass-panel:hover { transform: scale(1.03); }
+.gp1 { top: 30px; left: 40px; width: 200px; }
+.gp2 { top: 50%; left: 50%; transform: translate(-50%,-50%); width: 260px; }
+.gp3 { bottom: 25px; right: 40px; width: 180px; }
+.gp2:hover { transform: translate(-50%,-50%) scale(1.03); }
+.glass-label { font-size: 0.75rem; font-weight: 700; margin-bottom: 0.3rem; }
+.glass-val { font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: 600; color: var(--acid); }
+.glass-sub { font-size: 0.6rem; color: var(--muted); letter-spacing:0.1em; }
+
+/* FX 02 — FROSTED OVERLAY */
+.frost-scene {
+  width:100%; height:320px;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="320"><defs><linearGradient id="g1" x1="0%25" y1="0%25" x2="100%25" y2="100%25"><stop offset="0%25" stop-color="%23ff2d55"/><stop offset="50%25" stop-color="%238b5cf6"/><stop offset="100%25" stop-color="%2300e5ff"/></linearGradient></defs><rect width="400" height="320" fill="url(%23g1)"/><circle cx="100" cy="80" r="60" fill="rgba(255,255,255,0.1)"/><circle cx="300" cy="200" r="80" fill="rgba(255,255,255,0.08)"/><text x="50" y="160" font-size="80" fill="rgba(255,255,255,0.15)" font-family="serif">BG</text></svg>') center/cover;
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.frost-overlay {
+  width: 280px; padding: 2rem;
+  background: rgba(8,8,16,0.4);
+  backdrop-filter: blur(30px) brightness(1.1);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.frost-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
+.frost-body  { font-size: 0.72rem; color: var(--muted); line-height: 1.6; }
+.frost-btn {
+  display: inline-block; margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background: rgba(200,255,0,0.15);
+  border: 1px solid rgba(200,255,0,0.4);
+  border-radius: 100px;
+  font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--acid); cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.frost-btn:hover { background: rgba(200,255,0,0.25); transform: scale(1.05); }
+
+/* FX 03 — SCROLL REVEAL (IntersectionObserver) */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-item.visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal-item:nth-child(2) { transition-delay: 0.1s; }
+.reveal-item:nth-child(3) { transition-delay: 0.2s; }
+.reveal-item:nth-child(4) { transition-delay: 0.3s; }
+.reveal-item:nth-child(5) { transition-delay: 0.4s; }
+
+.reveal-demo {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 0.75rem;
+  padding: 1.5rem;
+}
+.reveal-block {
+  height: 80px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.15em; color: var(--muted);
+}
+.rb1 { background: linear-gradient(135deg, rgba(139,92,246,0.3), rgba(139,92,246,0.1)); border:1px solid rgba(139,92,246,0.3); }
+.rb2 { background: linear-gradient(135deg, rgba(255,45,85,0.3), rgba(255,45,85,0.1));  border:1px solid rgba(255,45,85,0.3);  }
+.rb3 { background: linear-gradient(135deg, rgba(0,229,255,0.3), rgba(0,229,255,0.1));  border:1px solid rgba(0,229,255,0.3);  }
+.rb4 { background: linear-gradient(135deg, rgba(200,255,0,0.2), rgba(200,255,0,0.05)); border:1px solid rgba(200,255,0,0.25); }
+.rb5 { background: linear-gradient(135deg, rgba(245,158,11,0.3), rgba(245,158,11,0.1));border:1px solid rgba(245,158,11,0.3); }
+.rb6 { background: linear-gradient(135deg, rgba(255,107,107,0.3),rgba(255,107,107,0.1));border:1px solid rgba(255,107,107,0.3);}
+
+/* FX 04 — PARALLAX */
+.parallax-scene {
+  height: 320px; overflow: hidden;
+  position: relative;
+}
+.plx-layer {
+  position: absolute; inset: 0;
+  background-size: cover;
+  will-change: transform;
+}
+.plx-bg {
+  background: radial-gradient(ellipse at 50% 80%, rgba(139,92,246,0.4), transparent 60%),
+              radial-gradient(ellipse at 20% 20%, rgba(0,229,255,0.3), transparent 50%),
+              #060612;
+}
+.plx-mid {
+  display: flex; align-items: center; justify-content: center;
+}
+.plx-circles {
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  border: 1px solid rgba(200,255,0,0.08);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+}
+.plx-circles::before {
+  content: '';
+  position: absolute; inset: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,229,255,0.06);
+}
+.plx-circles::after {
+  content: '';
+  position: absolute; inset: 70px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,45,85,0.08);
+}
+.plx-fg {
+  display: flex; align-items: center; justify-content: center;
+}
+.plx-text {
+  font-size: clamp(2rem,5vw,3.5rem);
+  font-weight: 800; letter-spacing: -0.03em;
+  background: linear-gradient(to right, #fff 30%, var(--acid));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  pointer-events: none;
+}
+
+/* FX 05 — TYPEWRITER / SCRAMBLE */
+.scramble-demo {
+  background: #000;
+  padding: 3rem;
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.scramble-text {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  min-height: 1.2em;
+  cursor: default;
+}
+.scramble-cursor::after {
+  content: '|';
+  color: var(--acid);
+  animation: blinkCursor 0.75s step-end infinite;
+}
+@keyframes blinkCursor { 50%{opacity:0} }
+.scramble-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.2em;
+  color: var(--muted); text-transform: uppercase;
+}
+
+/* FX 06 — MAGNETIC BUTTON */
+.mag-demo {
+  display: flex; flex-wrap: wrap; gap: 2rem;
+  align-items: center; justify-content: center;
+  padding: 2.5rem;
+  background: #050510;
+}
+.mag-btn {
+  position: relative;
+  padding: 1rem 2.5rem;
+  border-radius: 100px;
+  font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em;
+  cursor: pointer; border: none; overflow: hidden;
+  transition: transform 0.3s cubic-bezier(.25,.46,.45,.94);
+}
+.mag-btn-primary {
+  background: var(--acid); color: #000;
+  box-shadow: 0 0 40px rgba(200,255,0,0.3);
+}
+.mag-btn-outline {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  color: #fff;
+}
+.mag-btn-ghost {
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  color: var(--cyan);
+}
+.mag-btn .btn-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transform: scale(0);
+  animation: rippleAnim 0.6s linear;
+  pointer-events: none;
+}
+@keyframes rippleAnim { to{transform:scale(4); opacity:0} }
+
+/* FX 07 — HOVER SPLIT TEXT */
+.split-demo {
+  display: flex; align-items: center; justify-content: center;
+  background: #020208; padding: 3rem;
+  gap: 3rem; flex-wrap: wrap;
+}
+.split-word {
+  font-size: clamp(2rem,4vw,3.5rem);
+  font-weight: 800; letter-spacing: -0.02em;
+  position: relative; cursor: default;
+  display: inline-block;
+  overflow: hidden;
+}
+.split-word .top-half, .split-word .bot-half {
+  display: block; line-height: 0.95;
+  transition: transform 0.35s cubic-bezier(.25,.46,.45,.94), color 0.35s;
+}
+.split-word:hover .top-half { transform: translateY(-8px); color: var(--acid); }
+.split-word:hover .bot-half { transform: translateY(8px);  color: var(--hot); }
+
+/* FX 08 — STAGGER LIST */
+.stagger-list {
+  list-style: none;
+  padding: 1.5rem;
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.stagger-item {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  opacity: 0; transform: translateX(-20px);
+  transition: opacity 0.5s, transform 0.5s, background 0.2s;
+}
+.stagger-item.visible { opacity:1; transform:none; }
+.stagger-item:hover { background: rgba(255,255,255,0.06); }
+.si-icon { font-size: 1.3rem; }
+.si-name { font-size: 0.85rem; font-weight: 700; }
+.si-val  { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--acid); }
+
+/* FX 09 — PARTICLE CANVAS */
+#particle-canvas {
+  width: 100%; height: 300px;
+  display: block;
+  background: #020208;
+}
+
+/* FX 10 — NOISE BG + GRAIN */
+.noise-fx {
+  width: 100%; height: 300px;
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #0a001a, #001020, #1a0800);
+}
+.noise-fx::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: overlay; pointer-events: none;
+}
+.noise-fx::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 25% 50%, rgba(200,255,0,0.12), transparent 55%),
+    radial-gradient(ellipse at 75% 50%, rgba(0,229,255,0.10), transparent 55%);
+}
+.noise-content {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 0.5rem;
+}
+.noise-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(2rem,4vw,3.2rem);
+  font-weight: 400;
+  color: rgba(255,255,255,0.9);
+}
+.noise-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* FX 11 — SVG STROKE DRAW */
+.svg-draw-demo {
+  background: #050510; padding: 2rem;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 260px;
+}
+.svg-path-anim {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  transition: stroke-dashoffset 2s ease;
+}
+.svg-draw-demo.in-view .svg-path-anim {
+  stroke-dashoffset: 0;
+}
+
+/* FX 12 — COUNTER */
+.counter-demo {
+  display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;
+  padding: 2.5rem;
+  background: radial-gradient(ellipse at 50% 100%, rgba(200,255,0,0.06), transparent 60%), #080810;
+}
+.counter-item { text-align: center; }
+.counter-num {
+  font-size: clamp(2.5rem,5vw,4rem);
+  font-weight: 800; letter-spacing: -0.03em;
+  background: linear-gradient(to bottom, #fff, var(--muted));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.counter-suffix { color: var(--acid); -webkit-text-fill-color: var(--acid); }
+.counter-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+  margin-top: 0.3rem;
+}
+
+/* FX 13 — SMOOTH MARQUEE (bidirectional) */
+.marquee-section {
+  overflow: hidden; padding: 1.25rem 0;
+}
+.marquee-track {
+  display: flex; gap: 0; white-space: nowrap;
+}
+.marquee-track.fwd  { animation: mFwd  25s linear infinite; }
+.marquee-track.back { animation: mBack 30s linear infinite; }
+.marquee-track span {
+  padding: 0 2rem;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+}
+.marquee-track span::after { content: '·'; margin-left: 2rem; opacity: 0.3; }
+.mk-1 { background: rgba(200,255,0,0.9); color: #000; }
+.mk-2 { background: var(--hot); color: #fff; }
+@keyframes mFwd  { from{transform:translateX(0)}   to{transform:translateX(-50%)} }
+@keyframes mBack { from{transform:translateX(-50%)} to{transform:translateX(0)} }
+
+/* FX 14 — LOTTIE-LIKE CSS MORPH */
+.morph-demo {
+  display: flex; gap: 3rem; justify-content: center; flex-wrap: wrap;
+  padding: 2.5rem; background: #050510;
+}
+.morph-shape {
+  width: 120px; height: 120px;
+  background: linear-gradient(135deg, var(--mc1), var(--mc2));
+  animation: morphShape 6s ease-in-out infinite;
+  box-shadow: 0 0 40px var(--mc1);
+}
+.morph-shape:nth-child(2) { animation-delay: -2s; }
+.morph-shape:nth-child(3) { animation-delay: -4s; }
+.ms1 { --mc1: var(--violet); --mc2: var(--hot); }
+.ms2 { --mc1: var(--cyan);   --mc2: var(--acid); }
+.ms3 { --mc1: var(--hot);    --mc2: var(--gold); }
+@keyframes morphShape {
+  0%,100%{ border-radius:60% 40% 30% 70% / 60% 30% 70% 40%; transform:rotate(0deg); }
+  25%    { border-radius:30% 60% 70% 40% / 50% 60% 30% 60%; transform:rotate(90deg); }
+  50%    { border-radius:70% 30% 50% 50% / 30% 70% 70% 30%; transform:rotate(180deg); }
+  75%    { border-radius:40% 60% 30% 70% / 70% 40% 60% 30%; transform:rotate(270deg); }
+}
+
+/* FX 15 — 3D TILT (JS) */
+.tilt-demo {
+  display: flex; gap: 2rem; flex-wrap: wrap;
+  align-items: center; justify-content: center;
+  padding: 2.5rem;
+  background: radial-gradient(circle at 50% 50%, rgba(139,92,246,0.08), transparent 60%), #060612;
+  perspective: 1000px;
+}
+.tilt-card {
+  width: 200px; height: 240px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1rem; cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.1s;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.tilt-emoji { font-size: 3rem; transform: translateZ(30px); display: block; }
+.tilt-label { font-size: 0.8rem; font-weight: 700; transform: translateZ(20px); }
+
+/* FX 16 — SPOTLIGHT */
+.spotlight-demo {
+  height: 300px;
+  background: #030308;
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.spotlight-inner {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle 200px at var(--mx,50%) var(--my,50%),
+    rgba(200,255,0,0.12) 0%, transparent 70%);
+  pointer-events: none;
+  transition: background 0.05s;
+}
+.spotlight-text {
+  font-size: clamp(1.5rem,4vw,3rem);
+  font-weight: 800; letter-spacing: -0.02em;
+  color: rgba(255,255,255,0.15);
+  user-select: none;
+  position: relative; z-index: 1;
+}
+
+/* FX 17 — SCROLL PROGRESS COUNTER */
+.scroll-counter-demo {
+  padding: 1.5rem 2rem;
+  background: #060612;
+  display: flex; align-items: center; gap: 1.5rem;
+}
+.sc-track {
+  flex:1; height: 4px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px; overflow: hidden;
+}
+.sc-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--violet), var(--acid));
+  width: 0%; border-radius: 2px;
+  transition: width 0.1s linear;
+}
+.sc-pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.2rem; font-weight: 600;
+  color: var(--acid); min-width: 3.5ch;
+}
+
+/* FX 18 — TEXT GRADIENT SCROLL */
+.tgs-demo {
+  min-height: 300px;
+  background: #000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 3rem;
+}
+.tgs-word {
+  font-size: clamp(3rem,8vw,6.5rem);
+  font-weight: 800; letter-spacing: -0.04em;
+  background: linear-gradient(to right, var(--violet), var(--hot), var(--acid), var(--cyan), var(--violet));
+  background-size: 300% 100%;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  animation: gradFlow 4s linear infinite;
+}
+@keyframes gradFlow { 0%{background-position:0%} 100%{background-position:100%} }
+
+/* FX 19 — CLIP PATH REVEAL */
+.clip-demo {
+  display: flex; gap: 1px; height: 280px;
+  overflow: hidden; background: #000;
+}
+.clip-panel {
+  flex:1; position: relative; overflow: hidden;
+  cursor: pointer;
+}
+.clip-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.5s ease, clip-path 0.5s ease;
+}
+.clip-panel:hover .clip-bg { transform: scale(1.05); }
+.cp1 .clip-bg { background: linear-gradient(135deg, #1a003a, var(--violet)); }
+.cp2 .clip-bg { background: linear-gradient(135deg, #2a0010, var(--hot)); }
+.cp3 .clip-bg { background: linear-gradient(135deg, #001a1a, var(--cyan)); }
+.cp4 .clip-bg { background: linear-gradient(135deg, #1a1a00, var(--acid)); }
+.clip-label {
+  position: absolute; bottom: 1rem; left: 1rem;
+  font-weight: 700; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  transition: color 0.3s;
+}
+.clip-panel:hover .clip-label { color: #fff; }
+
+/* FX 20 — SKELETON LOADER */
+.skeleton-demo {
+  padding: 1.5rem; background: #060612;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.skel-row { display: flex; gap: 1rem; align-items: center; }
+.skel {
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.skel-avatar { width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0; }
+.skel-line   { height: 14px; flex: 1; }
+.skel-short  { height: 14px; width: 40%; }
+.skel-block  { height: 120px; width: 100%; }
+.skel-tag    { height: 26px; width: 80px; border-radius: 100px; }
+
+/* FX 21 — NEON GLOW BUTTON */
+.glow-demo {
+  background: #000; padding: 3rem;
+  display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; justify-content: center;
+}
+.glow-btn {
+  padding: 0.85rem 2.5rem;
+  border-radius: 6px;
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; border: 1.5px solid var(--gb-color);
+  background: transparent; color: var(--gb-color);
+  box-shadow: 0 0 0 var(--gb-color), inset 0 0 0 var(--gb-color);
+  transition: box-shadow 0.3s, background 0.3s;
+  position: relative;
+}
+.glow-btn::before {
+  content: '';
+  position: absolute; inset: -1px;
+  border-radius: inherit;
+  background: var(--gb-color);
+  opacity: 0;
+  filter: blur(12px);
+  transition: opacity 0.3s;
+}
+.glow-btn:hover::before { opacity: 0.35; }
+.glow-btn:hover { background: rgba(255,255,255,0.04); }
+.gb-acid  { --gb-color: var(--acid); }
+.gb-hot   { --gb-color: var(--hot);  }
+.gb-cyan  { --gb-color: var(--cyan); }
+
+/* FX 22 — INFINITE SPIN RING */
+.spin-demo {
+  display: flex; gap: 3rem; align-items: center; justify-content: center;
+  padding: 3rem; background: #050510;
+}
+.spin-ring {
+  position: relative; width: 120px; height: 120px;
+  display: flex; align-items: center; justify-content: center;
+}
+.spin-ring::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(var(--sr1), var(--sr2), var(--sr1));
+  animation: rotateFull 2s linear infinite;
+  padding: 3px;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.spin-ring-inner {
+  width: calc(100% - 6px); height: calc(100% - 6px);
+  border-radius: 50%; background: #0a0a14;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted);
+}
+@keyframes rotateFull { to{transform:rotate(360deg)} }
+.sr1 { --sr1: var(--acid);   --sr2: var(--cyan);   }
+.sr2 { --sr1: var(--hot);    --sr2: var(--violet);  }
+.sr3 { --sr1: var(--gold);   --sr2: var(--coral);   }
+
+/* FX 23 — ACCORDION */
+.accordion-demo { padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; background: #060612; }
+.acc-item {
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.acc-header {
+  padding: 1rem 1.25rem;
+  display: flex; justify-content: space-between; align-items: center;
+  cursor: pointer; font-size: 0.85rem; font-weight: 700;
+  transition: background 0.2s;
+}
+.acc-header:hover { background: rgba(255,255,255,0.03); }
+.acc-arrow {
+  font-size: 0.7rem; color: var(--acid);
+  transition: transform 0.3s; display: inline-block;
+}
+.acc-item.open .acc-arrow { transform: rotate(180deg); }
+.acc-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; color: var(--muted); line-height: 1.7;
+  padding: 0 1.25rem;
+}
+.acc-item.open .acc-body { max-height: 200px; padding: 0 1.25rem 1rem; }
+
+/* FX 24 — TOOLTIP */
+.tooltip-demo {
+  display: flex; gap: 2rem; flex-wrap: wrap;
+  align-items: center; justify-content: center;
+  padding: 3rem; background: #050510;
+}
+.has-tooltip { position: relative; cursor: default; }
+.tooltip-trigger {
+  padding: 0.6rem 1.4rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.8rem; font-weight: 600;
+  transition: background 0.2s;
+}
+.has-tooltip:hover .tooltip-trigger { background: rgba(255,255,255,0.09); }
+.tooltip-box {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%; transform: translateX(-50%) translateY(4px);
+  background: rgba(15,15,26,0.95);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px);
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; color: var(--text); white-space: nowrap;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.tooltip-box::after {
+  content: '';
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(255,255,255,0.12);
+}
+.has-tooltip:hover .tooltip-box { opacity:1; transform: translateX(-50%) translateY(0); }
+
+/* FX 25 — COLOR PICKER + LIVE PREVIEW */
+.color-demo {
+  padding: 2rem; background: #060612;
+  display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;
+}
+.color-preview {
+  flex:1; min-height: 140px; border-radius: 12px;
+  transition: background 0.3s;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1.2rem;
+  background: var(--pick-bg, #8b5cf6);
+}
+.color-controls { display: flex; flex-direction: column; gap: 0.75rem; }
+.color-row { display: flex; align-items: center; gap: 0.75rem; }
+.color-row label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing:0.1em; width: 12px; }
+input[type=range] {
+  -webkit-appearance: none;
+  width: 140px; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,0.1); outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #fff; cursor: pointer;
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+}
+.color-val { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted); min-width: 3ch; }
+
+/* FX 26 — WAVE/LIQUID BUTTON */
+.wave-demo {
+  display: flex; gap: 2.5rem; flex-wrap: wrap;
+  align-items: center; justify-content: center;
+  padding: 3rem; background: #000;
+}
+.wave-btn {
+  position: relative; overflow: hidden;
+  padding: 1rem 2.5rem;
+  background: #0a0a14;
+  border: 1.5px solid rgba(200,255,0,0.3);
+  border-radius: 6px;
+  font-size: 0.85rem; font-weight: 700; letter-spacing: 0.1em;
+  cursor: pointer; color: var(--acid);
+  transition: color 0.4s;
+}
+.wave-btn::before {
+  content: '';
+  position: absolute;
+  bottom: -60%; left: 50%;
+  width: 200%; padding-top: 200%;
+  background: var(--acid);
+  border-radius: 40%;
+  transform: translateX(-50%) translateY(100%);
+  transition: transform 0.6s cubic-bezier(.25,.46,.45,.94);
+}
+.wave-btn:hover::before { transform: translateX(-50%) translateY(20%); }
+.wave-btn:hover { color: #000; }
+.wave-btn span { position: relative; z-index: 1; }
+
+/* FX 27 — CARD STACK */
+.stack-demo {
+  display: flex; align-items: center; justify-content: center;
+  padding: 3rem; background: #040410;
+  min-height: 280px;
+}
+.card-stack {
+  position: relative; width: 220px; height: 150px;
+}
+.stack-card {
+  position: absolute; inset: 0;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1.1rem; letter-spacing: 0.05em;
+  transition: transform 0.4s cubic-bezier(.25,.46,.45,.94), opacity 0.4s;
+  cursor: pointer;
+}
+.sc-3 { background: #1a0040; transform: translateY(18px) scale(0.92) rotate(-3deg); opacity: 0.5; z-index: 1; }
+.sc-2 { background: #2a0020; transform: translateY(9px) scale(0.96) rotate(1.5deg); opacity: 0.75; z-index: 2; }
+.sc-1 { background: linear-gradient(135deg, #3d0070, #1a003a); z-index: 3; box-shadow: 0 20px 60px rgba(139,92,246,0.3); }
+.card-stack:hover .sc-3 { transform: translateY(28px) scale(0.9) rotate(-5deg); opacity: 0.4; }
+.card-stack:hover .sc-2 { transform: translateY(14px) scale(0.95) rotate(2.5deg); opacity: 0.65; }
+
+/* FX 28 — RADIAL PROGRESS */
+.radial-demo {
+  display: flex; gap: 3rem; flex-wrap: wrap;
+  align-items: center; justify-content: center;
+  padding: 2.5rem; background: #050510;
+}
+.radial-wrap { position: relative; width: 120px; height: 120px; }
+.radial-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.radial-bg-c { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 8; }
+.radial-fg-c {
+  fill: none; stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  transition: stroke-dashoffset 1.5s ease;
+}
+.radial-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.radial-pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.3rem; font-weight: 600; line-height: 1;
+}
+.radial-lbl {
+  font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+}
+
+/* FX 29 — DRAG TO REVEAL */
+.drag-demo {
+  position: relative; height: 280px; overflow: hidden; cursor: col-resize;
+  user-select: none;
+}
+.drag-before, .drag-after {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.drag-before {
+  background: linear-gradient(135deg, #1a0030, #0a0a0a);
+}
+.drag-after {
+  background: linear-gradient(135deg, #001a10, #003a1a);
+  clip-path: inset(0 50% 0 0);
+  transition: clip-path 0s;
+}
+.drag-handle {
+  position: absolute; top: 0; bottom: 0;
+  left: 50%; transform: translateX(-50%);
+  width: 3px; background: #fff; cursor: col-resize; z-index: 10;
+}
+.drag-handle::before {
+  content: '◀ ▶';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  background: #fff; color: #000;
+  font-size: 0.55rem; letter-spacing: 0.05em;
+  padding: 0.4rem 0.6rem; border-radius: 100px;
+  white-space: nowrap;
+}
+.drag-text {
+  font-size: clamp(1.5rem,4vw,2.5rem); font-weight: 800; letter-spacing: -0.02em;
+  color: rgba(255,255,255,0.2);
+}
+.drag-after .drag-text { color: var(--acid); }
+
+/* FX 30 — FLOATING LABELS */
+.float-demo {
+  display: flex; flex-direction: column; gap: 1.5rem;
+  padding: 2rem; background: #060612; max-width: 400px;
+}
+.float-field { position: relative; }
+.float-input {
+  width: 100%; padding: 1.2rem 1rem 0.6rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text); font-family: 'Syne', sans-serif; font-size: 0.9rem;
+  outline: none; transition: border-color 0.2s;
+}
+.float-input:focus { border-color: var(--acid); }
+.float-label {
+  position: absolute; top: 50%; left: 1rem;
+  transform: translateY(-50%);
+  font-size: 0.85rem; color: var(--muted);
+  transition: top 0.2s, font-size 0.2s, color 0.2s;
+  pointer-events: none;
+}
+.float-input:focus ~ .float-label,
+.float-input:not(:placeholder-shown) ~ .float-label {
+  top: 0.55rem; font-size: 0.6rem; letter-spacing: 0.1em; color: var(--acid);
+}
+
+/* FX 31 — RIPPLE CLICK */
+.ripple-demo {
+  display: flex; gap: 2rem; align-items: center; justify-content: center;
+  padding: 3rem; background: #050510; flex-wrap: wrap;
+}
+.ripple-surface {
+  width: 200px; height: 120px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; position: relative; overflow: hidden;
+  border: 1px solid var(--border);
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em;
+  transition: border-color 0.2s;
+}
+.rs1 { background: rgba(200,255,0,0.05); border-color: rgba(200,255,0,0.2); color: var(--acid); }
+.rs2 { background: rgba(255,45,85,0.05); border-color: rgba(255,45,85,0.2); color: var(--hot); }
+.ripple-wave {
+  position: absolute; border-radius: 50%;
+  transform: scale(0); animation: rippleWave 0.6s linear;
+  pointer-events: none;
+}
+.rs1 .ripple-wave { background: rgba(200,255,0,0.25); }
+.rs2 .ripple-wave { background: rgba(255,45,85,0.25); }
+@keyframes rippleWave { to{ transform:scale(4); opacity:0; } }
+
+/* FX 32 — INFINITE ORBIT */
+.orbit-demo {
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem; background: #030308; min-height: 300px;
+}
+.orbit-system { position: relative; width: 220px; height: 220px; }
+.orbit-center {
+  position: absolute; top:50%; left:50%;
+  transform: translate(-50%,-50%);
+  width: 40px; height: 40px; border-radius: 50%;
+  background: radial-gradient(circle, #fff 20%, var(--acid) 60%, transparent 80%);
+  box-shadow: 0 0 30px var(--acid), 0 0 60px rgba(200,255,0,0.3);
+}
+.orbit-ring {
+  position: absolute; border-radius: 50%;
+  border: 1px solid var(--or-color);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+}
+.or1 { width:100px;height:100px; --or-color:rgba(200,255,0,0.2); animation: orbitRing 3s linear infinite; }
+.or2 { width:160px;height:160px; --or-color:rgba(0,229,255,0.15); animation: orbitRing 5s linear infinite reverse; }
+.or3 { width:210px;height:210px; --or-color:rgba(139,92,246,0.1); animation: orbitRing 8s linear infinite; }
+.orbit-dot {
+  position: absolute; border-radius: 50%;
+  top: -4px; left: 50%; transform: translateX(-50%);
+}
+.od1 { width:8px;height:8px; background:var(--acid); box-shadow:0 0 8px var(--acid); }
+.od2 { width:6px;height:6px; background:var(--cyan); box-shadow:0 0 6px var(--cyan); }
+.od3 { width:5px;height:5px; background:var(--violet); box-shadow:0 0 6px var(--violet); }
+@keyframes orbitRing { to{transform:translate(-50%,-50%) rotate(360deg)} }
+
+/* FX 33 — MOUSE TRAIL */
+#trail-canvas { width:100%;height:280px;display:block;background:#020208; }
+
+/* FX 34 — TYPEWRITER MULTILINE */
+.tw-demo {
+  background: #050510; padding: 2.5rem;
+  font-family: 'Playfair Display', serif;
+  min-height: 260px;
+}
+.tw-line {
+  font-size: clamp(1.2rem,3vw,2rem);
+  line-height: 1.5; color: rgba(255,255,255,0.8);
+  overflow: hidden; white-space: nowrap;
+  border-right: none;
+  opacity: 0;
+}
+.tw-line.tw-active {
+  opacity: 1;
+  animation: typeLine var(--tw-dur, 2s) steps(var(--tw-steps, 30)) forwards;
+  border-right: 2px solid var(--acid);
+}
+.tw-line.tw-done {
+  opacity: 1; max-width: 100%; border-right: none;
+}
+@keyframes typeLine { from{max-width:0} to{max-width:100%} }
+.tw-line em { color: var(--acid); font-style: normal; }
+
+/* FX 35 — NOISE + VIDEO-LIKE SCAN */
+.scan-demo {
+  height: 280px; background: #000; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.scan-demo::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px
+  );
+  pointer-events: none; z-index: 2;
+}
+.scan-line {
+  position: absolute; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(to right, transparent, rgba(200,255,0,0.6), transparent);
+  animation: scanMove 2s linear infinite;
+  z-index: 3; pointer-events: none;
+  box-shadow: 0 0 12px rgba(200,255,0,0.4);
+}
+@keyframes scanMove { from{top:-4px} to{top:100%} }
+.scan-content {
+  text-align: center; position: relative; z-index: 1;
+}
+.scan-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(1.5rem,5vw,3rem); font-weight: 600;
+  color: rgba(200,255,0,0.85); letter-spacing: 0.15em;
+  text-shadow: 0 0 20px rgba(200,255,0,0.4);
+  animation: textFlicker 5s ease infinite;
+}
+@keyframes textFlicker { 0%,98%,100%{opacity:1} 99%{opacity:.3} }
+.scan-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.2em; color: rgba(200,255,0,0.4); margin-top: 0.5rem;
+}
+
+/* FX 36 — INFINITE SCROLL GALLERY */
+.gallery-strip {
+  overflow: hidden; padding: 1rem 0;
+  background: #060612;
+}
+.gallery-track {
+  display: flex; gap: 1rem;
+  animation: galleryScroll 20s linear infinite;
+  width: max-content;
+}
+.gallery-item {
+  width: 180px; height: 120px; border-radius: 8px; flex-shrink: 0;
+  border: 1px solid var(--border); overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+  transition: transform 0.3s;
+}
+.gallery-item:hover { transform: scale(1.05); }
+.gi1  { background: linear-gradient(135deg, #1a003a, var(--violet)); }
+.gi2  { background: linear-gradient(135deg, #2a0010, var(--hot)); }
+.gi3  { background: linear-gradient(135deg, #001a1a, var(--cyan)); }
+.gi4  { background: linear-gradient(135deg, #1a1a00, var(--acid)); }
+.gi5  { background: linear-gradient(135deg, #1a0800, var(--gold)); }
+.gi6  { background: linear-gradient(135deg, #1a0020, var(--coral)); }
+@keyframes galleryScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* FX 37 — NUMBER TICKER */
+.ticker-demo {
+  display: flex; gap: 2rem; flex-wrap: wrap;
+  align-items: center; justify-content: center;
+  padding: 2rem; background: #050510;
+}
+.ticker-item { text-align: center; }
+.ticker-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(2rem,5vw,3.5rem); font-weight: 600;
+  letter-spacing: -0.02em;
+  background: linear-gradient(to bottom, #fff, var(--muted));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.ticker-unit { color: var(--acid); -webkit-text-fill-color: var(--acid); }
+.ticker-label {
+  font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); margin-top: 0.4rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* FX 38 — CURSOR-FOLLOWING SPOTLIGHT */
+.follow-demo {
+  height: 280px; position: relative; overflow: hidden;
+  background: #020206; cursor: crosshair;
+}
+.follow-light {
+  position: absolute; pointer-events: none;
+  width: 350px; height: 350px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,255,0,0.08) 0%, transparent 70%);
+  transform: translate(-50%,-50%);
+  transition: left 0.1s, top 0.1s;
+  left: 50%; top: 50%;
+}
+.follow-text {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(1rem,2vw,1.5rem); font-weight: 700;
+  color: rgba(255,255,255,0.06);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* FX 39 — PROGRESSIVE IMAGE BLUR REVEAL */
+.blur-reveal-demo {
+  display: flex; gap: 1rem; padding: 1.5rem;
+  background: #060612; flex-wrap: wrap;
+}
+.blur-reveal-item {
+  flex:1; min-width: 160px; height: 120px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1.2rem;
+  transition: filter 0.8s ease, opacity 0.8s ease;
+}
+.blur-reveal-item.blurred { filter: blur(12px); opacity: 0.4; }
+.blur-reveal-item.visible { filter: none; opacity: 1; }
+.bri1 { background: linear-gradient(135deg, var(--violet), var(--hot)); }
+.bri2 { background: linear-gradient(135deg, var(--cyan), var(--acid)); }
+.bri3 { background: linear-gradient(135deg, var(--hot), var(--gold)); }
+
+/* FX 40 — SLIDING PANEL */
+.slide-panel-demo {
+  height: 280px; position: relative; overflow: hidden; background: #060612;
+  display: flex; align-items: center; justify-content: flex-end;
+}
+.slide-bg-content {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(2rem,6vw,4rem); font-weight: 800; color: rgba(255,255,255,0.06);
+  letter-spacing: -0.02em;
+}
+.slide-panel {
+  position: absolute; top: 0; right: -280px; bottom: 0;
+  width: 280px; background: rgba(15,15,26,0.95);
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255,255,255,0.1);
+  padding: 2rem 1.5rem;
+  transition: right 0.4s cubic-bezier(.25,.46,.45,.94);
+  z-index: 5;
+}
+.slide-panel.open { right: 0; }
+.slide-toggle {
+  position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+  padding: 0.6rem 1rem;
+  background: rgba(200,255,0,0.1);
+  border: 1px solid rgba(200,255,0,0.3);
+  border-radius: 6px;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; color: var(--acid);
+  cursor: pointer; z-index: 6; transition: right 0.4s, background 0.2s;
+}
+.slide-toggle.shifted { right: 300px; }
+.sp-title { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; }
+.sp-item {
+  padding: 0.6rem 0; border-bottom: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--muted);
+  display: flex; justify-content: space-between;
+}
+.sp-item span { color: var(--acid); }
+
+/* FX 41 — HORIZONTAL SCROLL SECTION */
+.hscroll-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.hscroll-track {
+  display: flex; gap: 1.5rem;
+  padding: 2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.hscroll-track::-webkit-scrollbar { display: none; }
+.hscroll-card {
+  flex-shrink: 0; width: 280px; height: 200px;
+  border-radius: 12px; border: 1px solid var(--border);
+  scroll-snap-align: start;
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 1.5rem;
+  position: relative; overflow: hidden;
+  cursor: grab; transition: transform 0.2s;
+}
+.hscroll-card:active { cursor: grabbing; }
+.hscroll-card:hover { transform: translateY(-4px); }
+.hc-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.4s;
+}
+.hscroll-card:hover .hc-bg { transform: scale(1.05); }
+.hc1 .hc-bg { background: linear-gradient(160deg, #0a0a1a, var(--violet)); }
+.hc2 .hc-bg { background: linear-gradient(160deg, #1a0010, var(--hot)); }
+.hc3 .hc-bg { background: linear-gradient(160deg, #001010, var(--cyan)); }
+.hc4 .hc-bg { background: linear-gradient(160deg, #101a00, var(--acid)); }
+.hc5 .hc-bg { background: linear-gradient(160deg, #1a0800, var(--gold)); }
+.hc-label { position: relative; z-index:1; }
+.hc-num { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing:0.2em; }
+.hc-title { font-size: 1.1rem; font-weight: 700; margin-top: 0.2rem; }
+
+/* FX 42 — TAB SWITCHER */
+.tab-demo { background: #060612; }
+.tab-bar {
+  display: flex; border-bottom: 1px solid var(--border);
+  padding: 0 1.5rem;
+}
+.tab-btn {
+  padding: 1rem 1.25rem;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em;
+  cursor: pointer; color: var(--muted);
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  background: none; border-top: none; border-left: none; border-right: none;
+}
+.tab-btn.active { color: var(--acid); border-bottom-color: var(--acid); }
+.tab-panel { display: none; padding: 1.5rem; }
+.tab-panel.active { display: block; }
+.tab-content-item {
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+  border-radius: 6px; margin-bottom: 0.5rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--muted);
+}
+
+/* FX 43 — SMOOTH LOADER */
+.loader-demo {
+  display: flex; gap: 3rem; flex-wrap: wrap;
+  align-items: center; justify-content: center;
+  padding: 3rem; background: #040410;
+}
+.loader-spin {
+  width: 50px; height: 50px; border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.05);
+  border-top-color: var(--acid);
+  animation: spinLoader 0.9s linear infinite;
+}
+@keyframes spinLoader { to{transform:rotate(360deg)} }
+.loader-dots {
+  display: flex; gap: 0.5rem; align-items: center;
+}
+.loader-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  animation: dotBounce 1.2s ease-in-out infinite;
+}
+.ld1 { background: var(--acid); }
+.ld2 { background: var(--cyan); animation-delay: 0.2s; }
+.ld3 { background: var(--hot);  animation-delay: 0.4s; }
+@keyframes dotBounce { 0%,80%,100%{transform:scale(0.8);opacity:0.5} 40%{transform:scale(1.2);opacity:1} }
+.loader-bar {
+  width: 150px; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden;
+}
+.loader-bar-fill {
+  height: 100%; border-radius: 2px;
+  background: linear-gradient(to right, var(--violet), var(--cyan));
+  animation: barFill 1.5s ease-in-out infinite;
+}
+@keyframes barFill { 0%{transform:translateX(-100%)} 50%{transform:translateX(0)} 100%{transform:translateX(100%)} }
+.loader-pulse {
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--hot); opacity: 0.8;
+  animation: pulseLoader 1.5s ease-out infinite;
+}
+@keyframes pulseLoader { 0%{transform:scale(0.8);opacity:0.8} 50%{transform:scale(1.1);opacity:0.5} 100%{transform:scale(0.8);opacity:0.8} }
+
+/* FX 44 — MULTI-LAYER DEPTH CARDS */
+.depth-demo {
+  display: flex; gap: 2rem; flex-wrap: wrap;
+  align-items: center; justify-content: center;
+  padding: 3rem; background: #040410;
+  perspective: 1200px;
+}
+.depth-card {
+  width: 200px; min-height: 220px;
+  position: relative; cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(.25,.46,.45,.94);
+}
+.depth-card:hover { transform: rotateY(15deg) rotateX(-5deg); }
+.depth-layer {
+  position: absolute; border-radius: 14px;
+  transition: transform 0.5s;
+}
+.dl0 { inset: 0; background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.1); z-index:3; }
+.dl1 { inset: 4px; border-radius: 12px; background: rgba(139,92,246,0.1); z-index:2; transform:translateZ(-5px); }
+.dl2 { inset: 10px; border-radius: 10px; background: rgba(139,92,246,0.06); z-index:1; transform:translateZ(-12px); }
+.depth-content { position:relative;z-index:4; padding:1.5rem; }
+.depth-icon { font-size: 2.5rem; margin-bottom:0.75rem; }
+.depth-name { font-size: 0.9rem; font-weight: 700; }
+.depth-info { font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:var(--muted); margin-top:0.4rem; line-height:1.6; }
+
+/* FX 45 — LIQUID GRADIENT ANIMATION */
+.liquid-demo {
+  height: 280px; position: relative; overflow: hidden;
+}
+.liquid-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    var(--lq-deg, 0deg),
+    #ff2d55, #8b5cf6, #00e5ff, #c8ff00, #ff2d55
+  );
+  background-size: 300% 300%;
+  animation: liquidFlow 6s ease infinite;
+}
+@keyframes liquidFlow {
+  0%  { background-position: 0% 50%;   --lq-deg: 0deg; }
+  50% { background-position: 100% 50%; --lq-deg: 180deg; }
+  100%{ background-position: 0% 50%;   --lq-deg: 360deg; }
+}
+.liquid-overlay {
+  position: absolute; inset: 0;
+  background: rgba(8,8,16,0.55);
+  backdrop-filter: blur(0px);
+}
+.liquid-content {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 0.5rem;
+}
+.liquid-title {
+  font-size: clamp(2rem,5vw,4rem); font-weight: 800; letter-spacing: -0.03em; color: #fff;
+}
+.liquid-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+
+/* FX 46 — STAGGERED GRID APPEAR */
+.sg-demo {
+  padding: 1.5rem;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem;
+}
+.sg-cell {
+  aspect-ratio: 1;
+  border-radius: 6px; border: 1px solid var(--border);
+  opacity: 0; transform: scale(0.8);
+  transition: opacity 0.4s, transform 0.4s;
+}
+.sg-cell.visible { opacity: 1; transform: none; }
+.sgc1 { background: rgba(139,92,246,0.3); }
+.sgc2 { background: rgba(200,255,0,0.2);  }
+.sgc3 { background: rgba(0,229,255,0.2);  }
+.sgc4 { background: rgba(255,45,85,0.25); }
+.sgc5 { background: rgba(245,158,11,0.25);}
+
+/* FX 47 — CONIC GRADIENT CLOCK */
+.clock-demo {
+  display: flex; gap: 3rem; flex-wrap: wrap;
+  align-items: center; justify-content: center;
+  padding: 2.5rem; background: #050510;
+}
+.conic-gauge {
+  width: 150px; height: 150px; border-radius: 50%;
+  position: relative; cursor: default;
+}
+.conic-gauge::before {
+  content: '';
+  position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(var(--cg-color) var(--cg-pct, 65%), rgba(255,255,255,0.05) 0%);
+}
+.conic-gauge::after {
+  content: '';
+  position: absolute; inset: 12px; border-radius: 50%;
+  background: #060612;
+}
+.conic-label {
+  position: absolute; inset: 0; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.conic-val { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 600; line-height: 1; }
+.conic-name { font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
+.cg-a { --cg-color: var(--acid);   --cg-pct: 72%; }
+.cg-b { --cg-color: var(--hot);    --cg-pct: 45%; }
+.cg-c { --cg-color: var(--cyan);   --cg-pct: 88%; }
+
+/* FX 48 — WORD HIGHLIGHT */
+.highlight-demo {
+  padding: 2.5rem; background: #050510;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem,2.5vw,1.8rem);
+  line-height: 1.8; color: rgba(255,255,255,0.6);
+}
+.hl { position: relative; }
+.hl::before {
+  content: '';
+  position: absolute; left: -0.1em; right: -0.1em;
+  bottom: 0.05em; height: 0.25em;
+  background: var(--hl-color, var(--acid));
+  opacity: 0.3; border-radius: 2px;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.5s ease;
+}
+.hl.visible::before { transform: scaleX(1); }
+.hl-acid   { --hl-color: var(--acid); color: rgba(255,255,255,0.95); }
+.hl-hot    { --hl-color: var(--hot); }
+.hl-cyan   { --hl-color: var(--cyan); }
+
+/* FX 49 — SPLIT SCREEN HOVER */
+.split-screen {
+  display: flex; height: 300px; overflow: hidden;
+}
+.ss-panel {
+  flex: 1; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  transition: flex 0.5s cubic-bezier(.25,.46,.45,.94);
+  cursor: pointer;
+}
+.ss-panel:hover { flex: 2; }
+.ss-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.5s;
+}
+.ss-panel:hover .ss-bg { transform: scale(1.05); }
+.ss1 .ss-bg { background: linear-gradient(160deg, #0a001a, #3d0070); }
+.ss2 .ss-bg { background: linear-gradient(160deg, #001a10, #006040); }
+.ss3 .ss-bg { background: linear-gradient(160deg, #1a0010, #700030); }
+.ss-label {
+  position: relative; z-index: 1;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+  opacity: 0.5; transition: opacity 0.3s, transform 0.3s;
+}
+.ss-panel:hover .ss-label { opacity: 1; transform: scale(1.1); }
+.ss-divider { width: 1px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
+
+/* FX 50 — DYNAMIC SHADOW */
+.shadow-demo {
+  display: flex; gap: 3rem; flex-wrap: wrap;
+  align-items: center; justify-content: center;
+  padding: 3rem; background: #060614;
+}
+.dyn-shadow {
+  width: 140px; height: 140px; border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.4s;
+}
+.ds1 { background: linear-gradient(135deg, var(--violet), var(--hot)); box-shadow: 0 10px 30px rgba(139,92,246,0.2); }
+.ds2 { background: linear-gradient(135deg, var(--cyan), var(--acid));  box-shadow: 0 10px 30px rgba(0,229,255,0.2); }
+.ds3 { background: linear-gradient(135deg, var(--hot), var(--gold));   box-shadow: 0 10px 30px rgba(255,45,85,0.2); }
+.ds1:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(139,92,246,0.5), 0 0 0 1px rgba(139,92,246,0.3); }
+.ds2:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(0,229,255,0.5), 0 0 0 1px rgba(0,229,255,0.3); }
+.ds3:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(255,45,85,0.5), 0 0 0 1px rgba(255,45,85,0.3); }
+
+/* ── INDEX SIDEBAR ── */
+#toc {
+  position: fixed; right: 1.5rem; top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.toc-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  cursor: pointer; transition: background 0.2s, transform 0.2s;
+  position: relative;
+}
+.toc-dot:hover, .toc-dot.active { background: var(--acid); transform: scale(1.4); }
+.toc-dot .toc-tip {
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  background: rgba(8,8,16,0.9); border: 1px solid var(--border);
+  padding: 0.25rem 0.6rem; border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s;
+}
+.toc-dot:hover .toc-tip { opacity: 1; }
+
+@media(max-width:768px){ #toc{ display:none; } }
+
+/* FOOTER */
+footer {
+  padding: 6rem 2rem;
+  text-align: center;
+  position: relative; overflow: hidden;
+  background: radial-gradient(ellipse at 50% 0%, rgba(200,255,0,0.04), transparent 60%);
+}
+.footer-big {
+  font-size: clamp(3rem,12vw,10rem); font-weight: 800;
+  line-height: 0.9; letter-spacing: -0.04em;
+  color: rgba(255,255,255,0.04);
+}
+.footer-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--muted); margin-top: 2rem;
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- TOC Dots -->
+<div id="toc">
+  <div class="toc-dot active" data-target="hero"><span class="toc-tip">Inicio</span></div>
+  <div class="toc-dot" data-target="ch1"><span class="toc-tip">Transparencias</span></div>
+  <div class="toc-dot" data-target="ch2"><span class="toc-tip">Scroll & Reveal</span></div>
+  <div class="toc-dot" data-target="ch3"><span class="toc-tip">Texto</span></div>
+  <div class="toc-dot" data-target="ch4"><span class="toc-tip">Interacción</span></div>
+  <div class="toc-dot" data-target="ch5"><span class="toc-tip">Partículas</span></div>
+  <div class="toc-dot" data-target="ch6"><span class="toc-tip">UI Components</span></div>
+  <div class="toc-dot" data-target="ch7"><span class="toc-tip">Movimiento</span></div>
+  <div class="toc-dot" data-target="ch8"><span class="toc-tip">Datos</span></div>
+  <div class="toc-dot" data-target="ch9"><span class="toc-tip">Layout FX</span></div>
+  <div class="toc-dot" data-target="ch10"><span class="toc-tip">Finishing</span></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">FX</span>
+  <a href="#ch1">Glass</a>
+  <a href="#ch2">Scroll</a>
+  <a href="#ch3">Text</a>
+  <a href="#ch4">Interact</a>
+  <a href="#ch5">Canvas</a>
+  <a href="#ch6">UI</a>
+  <a href="#ch7">Motion</a>
+</nav>
+
+<!-- ▓▓▓ HERO ▓▓▓ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Catálogo industrial / Edition 02</p>
+    <h1 class="hero-h1">
+      <span>VISUAL</span>
+      <em>FX</em>
+    </h1>
+    <p class="hero-sub">50 efectos de producción. HTML · CSS · JavaScript.</p>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">50</div>
+        <div class="hero-stat-label">Efectos</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">8</div>
+        <div class="hero-stat-label">Capítulos</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">∞</div>
+        <div class="hero-stat-label">Posibilidades</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="hero-scroll-line"></div><span>SCROLL</span></div>
+</section>
+
+<!-- ══════════════════════════════════════
+  CAPÍTULO 1 — TRANSPARENCIAS Y CAPAS
+══════════════════════════════════════ -->
+<div class="divider-line"></div>
+<section id="ch1">
+<div class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">CAP. 01</span>
+    <h2 class="chapter-title">TRANSPARENCIAS<br>Y CAPAS</h2>
+  </div>
+  <p class="chapter-desc">Glassmorphism, overlays y superposiciones. Técnicas basadas en backdrop-filter, mix-blend-mode y opacidades compuestas para crear profundidad visual sin complejidad estructural.</p>
+
+  <div class="fx-grid">
+    <!-- FX 01 -->
+    <div class="fx-card">
+      <div class="fx-demo">
+        <div class="glass-scene">
+          <div class="glass-blob gb1"></div><div class="glass-blob gb2"></div><div class="glass-blob gb3"></div>
+          <div class="glass-panel gp1"><div class="glass-label">Revenue</div><div class="glass-val">$84.2K</div><div class="glass-sub">+12.4% vs last month</div></div>
+          <div class="glass-panel gp2"><div class="glass-label">Dashboard</div><div class="glass-val">2,840</div><div class="glass-sub">Active users today</div></div>
+          <div class="glass-panel gp3"><div class="glass-label">Rate</div><div class="glass-val">98.7%</div><div class="glass-sub">Uptime SLA</div></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">01 — Glassmorphism Cards</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">backdrop-filter</span>
+        <p class="fx-desc">Paneles translúcidos con blur y saturación sobre fondos dinámicos. Usa backdrop-filter: blur() + background rgba. El key es el contraste entre el fondo colorido y el cristal neutro.</p>
+      </div>
+    </div>
+
+    <!-- FX 02 -->
+    <div class="fx-card">
+      <div class="fx-demo">
+        <div class="frost-scene">
+          <div class="frost-overlay">
+            <div class="frost-title">Frosted UI</div>
+            <div class="frost-body">Overlay oscuro con backdrop-filter sobre gradiente. Crea jerarquía visual sin perder el contexto del fondo.</div>
+            <div class="frost-btn">Explorar →</div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">02 — Frosted Dark Overlay</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">mix-blend-mode</span>
+        <p class="fx-desc">Panel oscuro semi-transparente sobre fondo colorido. Diferente al glassmorphism clásico: usa brightness() y blur combinados para un efecto más oscuro y dramático.</p>
+      </div>
+    </div>
+
+    <!-- FX 49 — SPLIT SCREEN -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="split-screen" style="width:100%;height:100%">
+          <div class="ss-panel ss1"><div class="ss-bg"></div><div class="ss-label">DARK</div></div>
+          <div class="ss-divider"></div>
+          <div class="ss-panel ss2"><div class="ss-bg"></div><div class="ss-label">FOREST</div></div>
+          <div class="ss-divider"></div>
+          <div class="ss-panel ss3"><div class="ss-bg"></div><div class="ss-label">ROUGE</div></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">03 — Split Screen Hover</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">flex</span>
+        <p class="fx-desc">Paneles en flex que redistribuyen el espacio al hacer hover. Usa flex: 2 en el panel activo con transition cubic-bezier para la expansión suave.</p>
+      </div>
+    </div>
+
+    <!-- FX 45 — LIQUID GRADIENT -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="liquid-demo" style="width:100%;height:100%">
+          <div class="liquid-bg"></div>
+          <div class="liquid-overlay"></div>
+          <div class="liquid-content">
+            <div class="liquid-title">LIQUID</div>
+            <div class="liquid-sub">Gradient Animation</div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">04 — Liquid Gradient Flow</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">@keyframes</span>
+        <p class="fx-desc">Gradiente de colores que fluye cambiando background-position en 300% background-size. La ilusión de movimiento viene de animar la posición, no el color.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════
+  CAPÍTULO 2 — SCROLL & REVEAL
+══════════════════════════════════════ -->
+<div class="divider-line"></div>
+<section id="ch2">
+<div class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">CAP. 02</span>
+    <h2 class="chapter-title">SCROLL<br>& REVEAL</h2>
+  </div>
+  <p class="chapter-desc">Animaciones activadas por el scroll usando IntersectionObserver. El estándar moderno para entrance animations, sin librerías externas, con rendimiento nativo del navegador.</p>
+
+  <div class="fx-grid">
+    <!-- FX 03 REVEAL -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="reveal-demo">
+          <div class="reveal-block rb1 reveal-item">SLIDE UP</div>
+          <div class="reveal-block rb2 reveal-item">FADE IN</div>
+          <div class="reveal-block rb3 reveal-item">STAGGER</div>
+          <div class="reveal-block rb4 reveal-item">REVEAL</div>
+          <div class="reveal-block rb5 reveal-item">SCROLL</div>
+          <div class="reveal-block rb6 reveal-item">APPEAR</div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">05 — Scroll Reveal (Staggered)</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag t-scroll">IntersectionObserver</span>
+        <p class="fx-desc">Elementos que aparecen en cascada al entrar en el viewport. IntersectionObserver añade clase .visible que activa la transición CSS. Transition-delay escalonado por nth-child.</p>
+      </div>
+    </div>
+
+    <!-- FX 04 PARALLAX -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="parallax-scene" id="plx-scene">
+          <div class="plx-layer plx-bg" id="plx-bg"></div>
+          <div class="plx-layer plx-mid" id="plx-mid">
+            <div class="plx-circles"></div>
+          </div>
+          <div class="plx-layer plx-fg" id="plx-fg">
+            <div class="plx-text">PARALLAX</div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">06 — Parallax Layers</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag t-scroll">scroll</span>
+        <p class="fx-desc">Tres capas moviéndose a velocidades distintas al hacer scroll. Cada capa tiene un factor multiplicador diferente. Fondo lento, frente rápido = profundidad.</p>
+      </div>
+    </div>
+
+    <!-- FX 17 SCROLL PROGRESS -->
+    <div class="fx-card">
+      <div class="fx-demo" style="flex-direction:column;gap:1rem;padding:2rem;background:#060612;">
+        <div style="font-size:0.7rem;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase">Progreso de lectura</div>
+        <div class="scroll-counter-demo" style="padding:0">
+          <div class="sc-track"><div class="sc-fill" id="sc-fill-demo"></div></div>
+          <div class="sc-pct" id="sc-pct-demo">0%</div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--muted)">Actualiza en tiempo real según el scroll de la página</div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">07 — Reading Progress Bar</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag t-scroll">scroll</span>
+        <p class="fx-desc">Barra que refleja el % del documento leído. Fórmula: scrollY / (scrollHeight - innerHeight) × 100. Ver la barra superior de esta página.</p>
+      </div>
+    </div>
+
+    <!-- FX 39 BLUR REVEAL -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="blur-reveal-demo">
+          <div class="blur-reveal-item bri1 blurred reveal-blur">BLUR</div>
+          <div class="blur-reveal-item bri2 blurred reveal-blur">INTO</div>
+          <div class="blur-reveal-item bri3 blurred reveal-blur">VIEW</div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">08 — Blur-to-Focus Reveal</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag t-scroll">IntersectionObserver</span>
+        <p class="fx-desc">Elementos comienzan en blur(12px) y opacity 0.4. Al entrar al viewport, transición a filter:none y opacity:1. Efecto de "enfoque de cámara" muy usado en portfolios.</p>
+      </div>
+    </div>
+
+    <!-- FX 48 HIGHLIGHT -->
+    <div class="fx-card fx-grid-wide" style="grid-column:span 2">
+      <div class="fx-demo" style="padding:0">
+        <div class="highlight-demo">
+          "El diseño <span class="hl hl-acid reveal-hl">no es solo apariencia</span>, es cómo <span class="hl hl-hot reveal-hl">las cosas funcionan</span>. La <span class="hl hl-cyan reveal-hl">experiencia visual</span> comunica antes de que el usuario lea una sola palabra."
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">09 — Word Highlight on Scroll</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag t-scroll">IntersectionObserver</span>
+        <p class="fx-desc">Subrayado que "se dibuja" al llegar a la vista usando scaleX(0) → scaleX(1) con transform-origin:left. Cada span tiene su color. Muy usado en landing pages de SaaS.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════
+  CAPÍTULO 3 — EFECTOS DE TEXTO
+══════════════════════════════════════ -->
+<div class="divider-line"></div>
+<section id="ch3">
+<div class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">CAP. 03</span>
+    <h2 class="chapter-title">EFECTOS<br>DE TEXTO</h2>
+  </div>
+  <p class="chapter-desc">Scramble, typewriter, gradient flow, split. El texto es el elemento más poderoso de una interfaz. Estos efectos convierten palabras en experiencias memorables.</p>
+
+  <div class="fx-grid">
+    <!-- FX 05 SCRAMBLE -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="scramble-demo">
+          <div class="scramble-label">hover para activar</div>
+          <div class="scramble-text scramble-cursor" id="scramble-el">SCRAMBLE FX</div>
+          <div class="scramble-label">efecto character scramble</div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">10 — Character Scramble</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">setInterval</span>
+        <p class="fx-desc">Texto que "decodifica" carácter por carácter. Cada frame reemplaza letras no reveladas con caracteres random del charset. Muy usado en UIs cyberpunk y tech.</p>
+      </div>
+    </div>
+
+    <!-- FX 18 GRADIENT FLOW -->
+    <div class="fx-card">
+      <div class="fx-demo">
+        <div class="tgs-demo" style="width:100%;height:100%">
+          <div class="tgs-word">CHROMA</div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">11 — Gradient Text Flow</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">background-clip</span>
+        <p class="fx-desc">Gradiente que fluye sobre texto usando background-size:300% y animando background-position. El texto es transparente (-webkit-text-fill-color:transparent) para revelar el fondo.</p>
+      </div>
+    </div>
+
+    <!-- FX 07 SPLIT TEXT -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="split-demo">
+          <div class="split-word">
+            <span class="top-half">SPLIT</span>
+            <span class="bot-half">SPLIT</span>
+          </div>
+          <div class="split-word">
+            <span class="top-half">TEXT</span>
+            <span class="bot-half">TEXT</span>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">12 — Split Text Hover</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">overflow:hidden</span>
+        <p class="fx-desc">Palabra dividida en dos mitades que se separan en hover. Cada mitad es un span con overflow:hidden. Clásico en portfolios de diseñadores y agencias.</p>
+      </div>
+    </div>
+
+    <!-- FX 34 TYPEWRITER MULTILINE -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="tw-demo" id="tw-container">
+          <div class="tw-line" style="--tw-dur:1.8s;--tw-steps:25" data-tw="true">"El diseño es <em>intención</em>."</div>
+          <div class="tw-line" style="--tw-dur:2s;--tw-steps:28" data-tw="true">"El código es <em>precisión</em>."</div>
+          <div class="tw-line" style="--tw-dur:2.5s;--tw-steps:35" data-tw="true">"La animación es <em>emoción</em>."</div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">13 — Typewriter Multilínea</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag t-css">CSS steps()</span>
+        <p class="fx-desc">Líneas que se escriben en secuencia. CSS animation con steps() para el efecto de máquina de escribir. JS encadena las líneas esperando que termine la anterior.</p>
+      </div>
+    </div>
+
+    <!-- FX 35 SCAN -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="scan-demo" style="width:100%;height:100%">
+          <div class="scan-line"></div>
+          <div class="scan-content">
+            <div class="scan-title">SYS.BOOT</div>
+            <div class="scan-code">INITIALIZING VISUAL SYSTEMS...</div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">14 — CRT Scanline + Flicker</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">repeating-linear-gradient</span>
+        <p class="fx-desc">Líneas de barrido (scanlines) creadas con repeating-linear-gradient. La línea verde animada simula un monitor CRT. El texto tiene un flicker sutil con @keyframes.</p>
+      </div>
+    </div>
+
+    <!-- FX 22 SPIN RING -->
+    <div class="fx-card">
+      <div class="fx-demo">
+        <div class="spin-demo">
+          <div class="spin-ring sr1"><div class="spin-ring-inner">ACID</div></div>
+          <div class="spin-ring sr2"><div class="spin-ring-inner">HOT</div></div>
+          <div class="spin-ring sr3"><div class="spin-ring-inner">GOLD</div></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">15 — Spinning Border Rings</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">conic-gradient</span>
+        <p class="fx-desc">Borde giratorio usando conic-gradient con mask-composite:exclude para el efecto anillo. La magia está en hacer padding+mask para que solo se vea el borde del padding.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════
+  CAPÍTULO 4 — INTERACCIÓN JS
+══════════════════════════════════════ -->
+<div class="divider-line"></div>
+<section id="ch4">
+<div class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">CAP. 04</span>
+    <h2 class="chapter-title">INTERACCIÓN<br>JS</h2>
+  </div>
+  <p class="chapter-desc">Efectos que responden al usuario en tiempo real. Mouse tracking, magnetic buttons, tilt 3D, ripple. Estos micro-interactions elevan la percepción de calidad de un producto.</p>
+
+  <div class="fx-grid">
+    <!-- FX 06 MAGNETIC BUTTON -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="mag-demo">
+          <button class="mag-btn mag-btn-primary magnetic-btn">MAGNETIC</button>
+          <button class="mag-btn mag-btn-outline magnetic-btn">OUTLINE</button>
+          <button class="mag-btn mag-btn-ghost magnetic-btn">GHOST</button>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">16 — Magnetic Buttons</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">mousemove</span>
+        <p class="fx-desc">Botones que se "atraen" hacia el cursor. JS calcula la distancia y desplaza el botón con transform:translate(). Dentro del umbral se activa la atracción magnética.</p>
+      </div>
+    </div>
+
+    <!-- FX 15 3D TILT -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="tilt-demo">
+          <div class="tilt-card" id="tilt1"><span class="tilt-emoji">🎮</span><span class="tilt-label">TILT 3D</span></div>
+          <div class="tilt-card" id="tilt2"><span class="tilt-emoji">✨</span><span class="tilt-label">HOVER</span></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">17 — 3D Tilt Card</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">mousemove</span>
+        <p class="fx-desc">Tarjeta que se inclina en 3D según la posición del cursor. JS normaliza la posición del mouse dentro de la tarjeta y aplica rotateX/rotateY. Requiere perspective en el padre.</p>
+      </div>
+    </div>
+
+    <!-- FX 16 SPOTLIGHT -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="spotlight-demo" id="spotlight-demo">
+          <div class="spotlight-inner" id="spotlight-inner"></div>
+          <div class="spotlight-text">MOVE YOUR CURSOR</div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">18 — Cursor Spotlight</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">CSS Variables</span>
+        <p class="fx-desc">Radial gradient que sigue el cursor actualizando CSS variables --mx y --my. El fondo está oscuro y el spotlight revela el contenido. Efecto muy usado en hero sections premium.</p>
+      </div>
+    </div>
+
+    <!-- FX 38 FOLLOW LIGHT -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="follow-demo" id="follow-demo">
+          <div class="follow-light" id="follow-light"></div>
+          <div class="follow-text">MUEVE EL CURSOR AQUÍ — LA LUZ TE SIGUE</div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">19 — Soft Following Light</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">getBoundingClientRect</span>
+        <p class="fx-desc">Luz suave que sigue el cursor con un lag visual (transition:0.1s). Diferente al spotlight: aquí el div se mueve físicamente. Muy atmosférico para fondos oscuros.</p>
+      </div>
+    </div>
+
+    <!-- FX 31 RIPPLE -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="ripple-demo">
+          <div class="ripple-surface rs1" id="rip1">CLICK AQUÍ</div>
+          <div class="ripple-surface rs2" id="rip2">CLICK AQUÍ</div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">20 — Ripple Click Effect</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">click event</span>
+        <p class="fx-desc">Onda que emana del punto exacto del click. JS crea un div circular posicionado en las coordenadas del click, lo anima con scale y lo elimina al terminar. Material Design clásico.</p>
+      </div>
+    </div>
+
+    <!-- FX 30 FLOATING LABELS -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0;align-items:center;justify-content:center">
+        <div class="float-demo">
+          <div class="float-field">
+            <input type="text" class="float-input" placeholder=" " id="fi1">
+            <label class="float-label" for="fi1">Nombre completo</label>
+          </div>
+          <div class="float-field">
+            <input type="email" class="float-input" placeholder=" " id="fi2">
+            <label class="float-label" for="fi2">Email</label>
+          </div>
+          <div class="float-field">
+            <input type="text" class="float-input" placeholder=" " id="fi3" value="@usuario">
+            <label class="float-label" for="fi3">Usuario</label>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">21 — Floating Labels</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">:focus + :not(:placeholder-shown)</span>
+        <p class="fx-desc">Label que sube al hacer focus usando solo CSS. El truco es placeholder=" " (espacio) y el selector :not(:placeholder-shown) que detecta si hay contenido.</p>
+      </div>
+    </div>
+
+    <!-- FX 29 DRAG REVEAL -->
+    <div class="fx-card" style="grid-column:span 1">
+      <div class="fx-demo" style="padding:0">
+        <div class="drag-demo" id="drag-demo">
+          <div class="drag-before"><div class="drag-text">ANTES</div></div>
+          <div class="drag-after" id="drag-after"><div class="drag-text">DESPUÉS</div></div>
+          <div class="drag-handle" id="drag-handle"></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">22 — Drag to Compare</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">mousedown + mousemove</span>
+        <p class="fx-desc">Divisor arrastrable para comparar dos estados. JS actualiza clip-path:inset(0 X% 0 0) en el panel derecho según la posición del drag. Muy usado en comparativas before/after.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════
+  CAPÍTULO 5 — CANVAS & PARTÍCULAS
+══════════════════════════════════════ -->
+<div class="divider-line"></div>
+<section id="ch5">
+<div class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">CAP. 05</span>
+    <h2 class="chapter-title">CANVAS<br>& PARTÍCULAS</h2>
+  </div>
+  <p class="chapter-desc">Efectos dibujados en Canvas 2D y WebGL básico. Partículas, trazos de cursor y geometría animada usando requestAnimationFrame.</p>
+
+  <div class="fx-grid">
+    <!-- FX 09 PARTICLES -->
+    <div class="fx-card" style="grid-column:span 1">
+      <div class="fx-demo" style="padding:0">
+        <canvas id="particle-canvas"></canvas>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">23 — Particle Network</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">Canvas 2D</span>
+        <p class="fx-desc">Red de partículas conectadas por líneas. Cada partícula tiene velocidad y posición. Si la distancia entre dos es menor a un umbral se dibuja una línea. Loop con requestAnimationFrame.</p>
+      </div>
+    </div>
+
+    <!-- FX 33 TRAIL -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <canvas id="trail-canvas"></canvas>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">24 — Mouse Trail Canvas</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">Canvas 2D</span>
+        <p class="fx-desc">Rastro de partículas que sigue el cursor. Cada movimiento genera puntos con vida útil. Canvas se dibuja con fillRect semitransparente para crear el trail decay.</p>
+      </div>
+    </div>
+
+    <!-- FX 32 ORBIT -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="orbit-demo" style="width:100%;height:100%">
+          <div class="orbit-system">
+            <div class="orbit-center"></div>
+            <div class="orbit-ring or1"><div class="orbit-dot od1"></div></div>
+            <div class="orbit-ring or2"><div class="orbit-dot od2"></div></div>
+            <div class="orbit-ring or3"><div class="orbit-dot od3"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">25 — CSS Orbital System</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">transform</span>
+        <p class="fx-desc">Sistema orbital con CSS puro. El punto no orbita: el anillo gira. El punto está en top:-4px del anillo, así que al rotar el anillo, el punto orbita. Truco clásico.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════
+  CAPÍTULO 6 — UI COMPONENTS
+══════════════════════════════════════ -->
+<div class="divider-line"></div>
+<section id="ch6">
+<div class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">CAP. 06</span>
+    <h2 class="chapter-title">UI<br>COMPONENTS</h2>
+  </div>
+  <p class="chapter-desc">Componentes de interfaz con animaciones de estado. Skeleton loaders, tooltips, accordions, loaders. Los bloques de construcción de cualquier producto digital moderno.</p>
+
+  <div class="fx-grid">
+    <!-- FX 20 SKELETON -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="skeleton-demo">
+          <div class="skel-row"><div class="skel skel-avatar"></div><div style="flex:1;display:flex;flex-direction:column;gap:0.5rem"><div class="skel skel-line"></div><div class="skel skel-short"></div></div></div>
+          <div class="skel skel-block"></div>
+          <div class="skel-row" style="gap:0.5rem"><div class="skel skel-tag"></div><div class="skel skel-tag"></div><div class="skel skel-tag"></div></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">26 — Skeleton Loader</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">shimmer animation</span>
+        <p class="fx-desc">Placeholder de contenido con efecto shimmer. El brillo es un linear-gradient animando background-position de 200% a -200%. Reemplaza spinners en cargas de contenido.</p>
+      </div>
+    </div>
+
+    <!-- FX 24 TOOLTIP -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="tooltip-demo">
+          <div class="has-tooltip"><div class="tooltip-trigger">Hover me</div><div class="tooltip-box">💡 Aparezco con CSS :hover y opacity</div></div>
+          <div class="has-tooltip"><div class="tooltip-trigger">Settings</div><div class="tooltip-box">⚙️ Configuración del sistema</div></div>
+          <div class="has-tooltip"><div class="tooltip-trigger">Export</div><div class="tooltip-box">📦 Exportar como .json o .csv</div></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">27 — Animated Tooltips</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">opacity + transform</span>
+        <p class="fx-desc">Tooltip que aparece con opacity y translateY. CSS puro usando el selector .has-tooltip:hover .tooltip-box. El triángulo es con border trick en ::after.</p>
+      </div>
+    </div>
+
+    <!-- FX 23 ACCORDION -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="accordion-demo">
+          <div class="acc-item open">
+            <div class="acc-header acc-trigger">¿Qué es el glassmorphism? <span class="acc-arrow">▼</span></div>
+            <div class="acc-body">Técnica de diseño que usa fondos semi-transparentes con blur y bordes sutiles para crear sensación de profundidad y capas. Popularizado por iOS y macOS.</div>
+          </div>
+          <div class="acc-item">
+            <div class="acc-header acc-trigger">¿Cómo funciona backdrop-filter? <span class="acc-arrow">▼</span></div>
+            <div class="acc-body">Aplica efectos (blur, brightness, saturate) al contenido detrás del elemento. Requiere que el elemento tenga un background con algo de transparencia para verse.</div>
+          </div>
+          <div class="acc-item">
+            <div class="acc-header acc-trigger">¿Cuándo usar IntersectionObserver? <span class="acc-arrow">▼</span></div>
+            <div class="acc-body">Cuando necesitas detectar si un elemento está en el viewport de forma eficiente. Evita el listener de scroll clásico que es mucho más costoso en performance.</div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">28 — Smooth Accordion</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">max-height transition</span>
+        <p class="fx-desc">Acordeón con apertura suave usando max-height transition. El truco: max-height:0 → max-height:200px (no height:auto, que no es animable en CSS). JS añade clase .open.</p>
+      </div>
+    </div>
+
+    <!-- FX 42 TABS -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="tab-demo">
+          <div class="tab-bar">
+            <button class="tab-btn active" data-tab="0">Overview</button>
+            <button class="tab-btn" data-tab="1">Analytics</button>
+            <button class="tab-btn" data-tab="2">Settings</button>
+          </div>
+          <div class="tab-panel active" data-panel="0">
+            <div class="tab-content-item">📊 Total usuarios: 24,891</div>
+            <div class="tab-content-item">💰 Revenue MTD: $128,400</div>
+          </div>
+          <div class="tab-panel" data-panel="1">
+            <div class="tab-content-item">📈 Conversión: 3.2%</div>
+            <div class="tab-content-item">🔄 Retención: 68%</div>
+          </div>
+          <div class="tab-panel" data-panel="2">
+            <div class="tab-content-item">🔒 2FA: Activado</div>
+            <div class="tab-content-item">🌍 Región: US-East-1</div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">29 — Tab Switcher</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">display:none toggle</span>
+        <p class="fx-desc">Sistema de tabs con active state. JS maneja la clase .active tanto en botones como en paneles. El underline del tab activo usa border-bottom con transition.</p>
+      </div>
+    </div>
+
+    <!-- FX 43 LOADERS -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="loader-demo">
+          <div class="loader-spin"></div>
+          <div class="loader-dots"><div class="loader-dot ld1"></div><div class="loader-dot ld2"></div><div class="loader-dot ld3"></div></div>
+          <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+          <div class="loader-pulse"></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">30 — Loading Patterns</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">@keyframes</span>
+        <p class="fx-desc">4 variantes: spinner (rotate), dots (scale staggered), bar (translateX), pulse (scale + opacity). Cada una comunica un tipo diferente de espera al usuario.</p>
+      </div>
+    </div>
+
+    <!-- FX 40 SLIDE PANEL -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="slide-panel-demo" id="slide-demo">
+          <div class="slide-bg-content">PANEL →</div>
+          <div class="slide-panel" id="slide-panel">
+            <div class="sp-title">⚙️ Config</div>
+            <div class="sp-item">Tema <span>Oscuro</span></div>
+            <div class="sp-item">Idioma <span>ES</span></div>
+            <div class="sp-item">Versión <span>2.4.1</span></div>
+          </div>
+          <button class="slide-toggle" id="slide-toggle">ABRIR ›</button>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">31 — Sliding Side Panel</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">right: transition</span>
+        <p class="fx-desc">Panel lateral que entra deslizándose. CSS: right:-280px → right:0 con transition cubic-bezier. Backdrop blur para darle profundidad. Patrón de drawer/sidebar muy común en apps.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════
+  CAPÍTULO 7 — MOVIMIENTO Y MORFISMO
+══════════════════════════════════════ -->
+<div class="divider-line"></div>
+<section id="ch7">
+<div class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">CAP. 07</span>
+    <h2 class="chapter-title">MOVIMIENTO<br>& MORFISMO</h2>
+  </div>
+  <p class="chapter-desc">Marquees, morfos, stacks, waves. El movimiento continuo crea sensación de vida en una interfaz. Desde el sutil hasta el dramático.</p>
+
+  <div class="fx-grid">
+    <!-- MARQUEE -->
+    <div class="fx-card" style="grid-column:1/-1">
+      <div class="fx-demo" style="padding:0;flex-direction:column;gap:0">
+        <div class="marquee-section mk-1"><div class="marquee-track fwd"><span>GLASSMORPHISM</span><span>PARALLAX</span><span>SCROLL REVEAL</span><span>TILT 3D</span><span>PARTICLE FX</span><span>CANVAS</span><span>GLASSMORPHISM</span><span>PARALLAX</span><span>SCROLL REVEAL</span><span>TILT 3D</span><span>PARTICLE FX</span><span>CANVAS</span></div></div>
+        <div class="marquee-section mk-2"><div class="marquee-track back"><span>MAGNETIC BUTTON</span><span>RIPPLE CLICK</span><span>BLOB GRADIENT</span><span>SCRAMBLE TEXT</span><span>SVG DRAW</span><span>SKELETON</span><span>MAGNETIC BUTTON</span><span>RIPPLE CLICK</span><span>BLOB GRADIENT</span><span>SCRAMBLE TEXT</span><span>SVG DRAW</span><span>SKELETON</span></div></div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">32 — Bidirectional Marquee</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">translateX animation</span>
+        <p class="fx-desc">Ticker infinito con dos filas en dirección opuesta. Contenido duplicado para el seamless loop. La primera fila va al 0→-50%, la segunda al -50%→0. Clásico en agencias y SaaS.</p>
+      </div>
+    </div>
+
+    <!-- MORPHING -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="morph-demo">
+          <div class="morph-shape ms1"></div>
+          <div class="morph-shape ms2"></div>
+          <div class="morph-shape ms3"></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">33 — Morphing Shapes</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">border-radius morph</span>
+        <p class="fx-desc">Formas orgánicas que mudan de geometría animando border-radius con 8 valores (CSS nivel 4). La rotación simultánea amplifica la sensación de fluidez. box-shadow + filter:blur para el glow.</p>
+      </div>
+    </div>
+
+    <!-- CARD STACK -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="stack-demo">
+          <div class="card-stack">
+            <div class="stack-card sc-3">✦</div>
+            <div class="stack-card sc-2">✦✦</div>
+            <div class="stack-card sc-1">STACK</div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">34 — Card Stack Effect</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">z-index + transform</span>
+        <p class="fx-desc">Efecto de apilamiento con profundidad. Cada tarjeta tiene translateY, scale y rotate distintos. Al hover, las cartas de fondo se abren más. Todo CSS con :hover en el padre.</p>
+      </div>
+    </div>
+
+    <!-- WAVE BUTTON -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="wave-demo">
+          <button class="wave-btn"><span>WAVE FILL</span></button>
+          <button class="wave-btn" style="--acid:var(--hot);border-color:rgba(255,45,85,0.4);color:var(--hot)"><span>LIQUID IN</span></button>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">35 — Liquid Wave Button</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">::before translateY</span>
+        <p class="fx-desc">Relleno líquido que asciende en hover. El ::before es un círculo gigante en overflow:hidden que se mueve de translateY(100%) a translateY(20%). El borde redondeado del círculo crea la ola.</p>
+      </div>
+    </div>
+
+    <!-- HORIZONTAL SCROLL -->
+    <div class="fx-card" style="grid-column:span 1">
+      <div class="fx-demo" style="padding:0">
+        <div class="hscroll-wrap">
+          <div class="hscroll-track">
+            <div class="hscroll-card hc1"><div class="hc-bg"></div><div class="hc-label"><div class="hc-num">01 / DESIGN</div><div class="hc-title">Glassmorphism</div></div></div>
+            <div class="hscroll-card hc2"><div class="hc-bg"></div><div class="hc-label"><div class="hc-num">02 / MOTION</div><div class="hc-title">Parallax</div></div></div>
+            <div class="hscroll-card hc3"><div class="hc-bg"></div><div class="hc-label"><div class="hc-num">03 / FX</div><div class="hc-title">Particles</div></div></div>
+            <div class="hscroll-card hc4"><div class="hc-bg"></div><div class="hc-label"><div class="hc-num">04 / TEXT</div><div class="hc-title">Scramble</div></div></div>
+            <div class="hscroll-card hc5"><div class="hc-bg"></div><div class="hc-label"><div class="hc-num">05 / GOLD</div><div class="hc-title">Dynamic FX</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">36 — Horizontal Scroll Gallery</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">scroll-snap</span>
+        <p class="fx-desc">Galería con scroll horizontal y snap. overflow-x:auto + scroll-snap-type:x mandatory en el track, scroll-snap-align:start en cada card. Drag to scroll en desktop.</p>
+      </div>
+    </div>
+
+    <!-- INFINITE GALLERY -->
+    <div class="fx-card" style="grid-column:span 1">
+      <div class="fx-demo" style="padding:0;overflow:hidden">
+        <div class="gallery-strip">
+          <div class="gallery-track">
+            <div class="gallery-item gi1">🎨</div><div class="gallery-item gi2">🔥</div>
+            <div class="gallery-item gi3">💎</div><div class="gallery-item gi4">⚡</div>
+            <div class="gallery-item gi5">🌟</div><div class="gallery-item gi6">🎭</div>
+            <div class="gallery-item gi1">🎨</div><div class="gallery-item gi2">🔥</div>
+            <div class="gallery-item gi3">💎</div><div class="gallery-item gi4">⚡</div>
+            <div class="gallery-item gi5">🌟</div><div class="gallery-item gi6">🎭</div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">37 — Infinite Auto Gallery</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">translateX loop</span>
+        <p class="fx-desc">Galería de imágenes/cards que se desplaza sola infinitamente. Contenido duplicado + translateX(0) → translateX(-50%). Al llegar al 50% el loop es imperceptible.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════
+  CAPÍTULO 8 — DATOS Y MÉTRICAS
+══════════════════════════════════════ -->
+<div class="divider-line"></div>
+<section id="ch8">
+<div class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">CAP. 08</span>
+    <h2 class="chapter-title">DATOS<br>& MÉTRICAS</h2>
+  </div>
+  <p class="chapter-desc">Counters animados, gauges radiales, progress bars. Cuando los números son el mensaje, la animación los hace memorables.</p>
+
+  <div class="fx-grid">
+    <!-- FX 12 COUNTER -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="counter-demo">
+          <div class="counter-item"><div class="counter-num" data-target="24891" data-suffix="">0</div><div class="counter-label">Usuarios activos</div></div>
+          <div class="counter-item"><div class="counter-num" data-target="98" data-suffix="%">0%</div><div class="counter-label">Uptime</div></div>
+          <div class="counter-item"><div class="counter-num" data-target="4.9" data-suffix="★" data-float="true">0★</div><div class="counter-label">Rating</div></div>
+          <div class="counter-item"><div class="counter-num" data-target="128" data-suffix="K">0K</div><div class="counter-label">Revenue</div></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">38 — Animated Number Counter</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">requestAnimationFrame</span>
+        <p class="fx-desc">Números que cuentan hasta su valor objetivo al entrar en el viewport. JS usa easing (easeOutQuart) con requestAnimationFrame. IntersectionObserver activa la cuenta una sola vez.</p>
+      </div>
+    </div>
+
+    <!-- FX 28 RADIAL -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="radial-demo" id="radial-demo">
+          <div class="radial-wrap">
+            <svg class="radial-svg" viewBox="0 0 100 100"><circle class="radial-bg-c" cx="50" cy="50" r="45"/><circle class="radial-fg-c" cx="50" cy="50" r="45" stroke="var(--acid)" id="rad1" data-pct="72"/></svg>
+            <div class="radial-center"><div class="radial-pct" style="color:var(--acid)">72%</div><div class="radial-lbl">CPU</div></div>
+          </div>
+          <div class="radial-wrap">
+            <svg class="radial-svg" viewBox="0 0 100 100"><circle class="radial-bg-c" cx="50" cy="50" r="45"/><circle class="radial-fg-c" cx="50" cy="50" r="45" stroke="var(--hot)" id="rad2" data-pct="45"/></svg>
+            <div class="radial-center"><div class="radial-pct" style="color:var(--hot)">45%</div><div class="radial-lbl">RAM</div></div>
+          </div>
+          <div class="radial-wrap">
+            <svg class="radial-svg" viewBox="0 0 100 100"><circle class="radial-bg-c" cx="50" cy="50" r="45"/><circle class="radial-fg-c" cx="50" cy="50" r="45" stroke="var(--cyan)" id="rad3" data-pct="88"/></svg>
+            <div class="radial-center"><div class="radial-pct" style="color:var(--cyan)">88%</div><div class="radial-lbl">DISK</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">39 — SVG Radial Progress</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">stroke-dashoffset</span>
+        <p class="fx-desc">Gauge circular con SVG circle. stroke-dasharray = circunferencia (2πr). stroke-dashoffset = circunferencia × (1 - pct). JS anima desde dashoffset=circ hasta el valor objetivo.</p>
+      </div>
+    </div>
+
+    <!-- FX 47 CONIC GAUGE -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="clock-demo">
+          <div class="conic-gauge cg-a"><div class="conic-label"><div class="conic-val" style="color:var(--acid)">72<span style="font-size:0.8rem">%</span></div><div class="conic-name">CPU Load</div></div></div>
+          <div class="conic-gauge cg-b"><div class="conic-label"><div class="conic-val" style="color:var(--hot)">45<span style="font-size:0.8rem">%</span></div><div class="conic-name">Memory</div></div></div>
+          <div class="conic-gauge cg-c"><div class="conic-label"><div class="conic-val" style="color:var(--cyan)">88<span style="font-size:0.8rem">%</span></div><div class="conic-name">Storage</div></div></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">40 — Conic Gradient Gauges</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">conic-gradient</span>
+        <p class="fx-desc">Medidores hechos solo con CSS usando conic-gradient(color X%, bg-color 0%). La variable CSS --cg-pct controla el porcentaje. El hueco central usa ::after con el color de fondo.</p>
+      </div>
+    </div>
+
+    <!-- FX 37 TICKER -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="ticker-demo">
+          <div class="ticker-item">
+            <div class="ticker-display" data-ticker="true" data-from="0" data-to="128400" data-prefix="$">$0</div>
+            <div class="ticker-label">Monthly Revenue</div>
+          </div>
+          <div class="ticker-item">
+            <div class="ticker-display" data-ticker="true" data-from="0" data-to="3.24" data-decimals="2" data-suffix="%">0%</div>
+            <div class="ticker-label">Conversion Rate</div>
+          </div>
+          <div class="ticker-item">
+            <div class="ticker-display" data-ticker="true" data-from="0" data-to="9842">0</div>
+            <div class="ticker-label">New Signups</div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">41 — Live Number Ticker</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">easing function</span>
+        <p class="fx-desc">Similar al counter pero con más control: soporte para decimales, prefijos ($), sufijos (%). Usa easeOutExpo para una aceleración realista. Los números grandes se formatean con toLocaleString().</p>
+      </div>
+    </div>
+
+    <!-- FX 08 STAGGER LIST -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <ul class="stagger-list">
+          <li class="stagger-item reveal-stagger"><span class="si-icon">📈</span><span class="si-name">Revenue Growth</span><span class="si-val">+24%</span></li>
+          <li class="stagger-item reveal-stagger"><span class="si-icon">👥</span><span class="si-name">New Users</span><span class="si-val">9,842</span></li>
+          <li class="stagger-item reveal-stagger"><span class="si-icon">⚡</span><span class="si-name">Performance</span><span class="si-val">98ms</span></li>
+          <li class="stagger-item reveal-stagger"><span class="si-icon">🔒</span><span class="si-name">Incidents</span><span class="si-val">0</span></li>
+        </ul>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">42 — Stagger Slide List</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">translateX + opacity</span>
+        <p class="fx-desc">Lista que aparece con items en cascada desde la izquierda. Cada item tiene transition-delay calculado por su índice: index × 80ms. Muy efectivo para listas de features o métricas.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════
+  CAPÍTULO 9 — LAYOUT & COMPOSICIÓN
+══════════════════════════════════════ -->
+<div class="divider-line"></div>
+<section id="ch9">
+<div class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">CAP. 09</span>
+    <h2 class="chapter-title">LAYOUT<br>& COMPOSICIÓN</h2>
+  </div>
+  <p class="chapter-desc">Efectos que operan a nivel de composición: grids que aparecen, depth cards con capas, SVG que se dibuja, color pickers en vivo.</p>
+
+  <div class="fx-grid">
+    <!-- FX 46 GRID APPEAR -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="sg-demo" id="sg-demo">
+          <div class="sg-cell sgc1 reveal-sg"></div><div class="sg-cell sgc2 reveal-sg"></div><div class="sg-cell sgc3 reveal-sg"></div><div class="sg-cell sgc4 reveal-sg"></div><div class="sg-cell sgc5 reveal-sg"></div>
+          <div class="sg-cell sgc5 reveal-sg"></div><div class="sg-cell sgc1 reveal-sg"></div><div class="sg-cell sgc4 reveal-sg"></div><div class="sg-cell sgc2 reveal-sg"></div><div class="sg-cell sgc3 reveal-sg"></div>
+          <div class="sg-cell sgc3 reveal-sg"></div><div class="sg-cell sgc5 reveal-sg"></div><div class="sg-cell sgc1 reveal-sg"></div><div class="sg-cell sgc4 reveal-sg"></div><div class="sg-cell sgc2 reveal-sg"></div>
+          <div class="sg-cell sgc2 reveal-sg"></div><div class="sg-cell sgc3 reveal-sg"></div><div class="sg-cell sgc5 reveal-sg"></div><div class="sg-cell sgc1 reveal-sg"></div><div class="sg-cell sgc4 reveal-sg"></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">43 — Grid Cell Appear</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">staggered delay</span>
+        <p class="fx-desc">Grid de celdas que aparece con delay por índice. JS asigna transition-delay = index × 30ms al entrar al viewport. Útil para dashboards, tableros o galerías.</p>
+      </div>
+    </div>
+
+    <!-- FX 44 DEPTH CARD -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="depth-demo">
+          <div class="depth-card">
+            <div class="depth-layer dl2"></div>
+            <div class="depth-layer dl1"></div>
+            <div class="depth-layer dl0"></div>
+            <div class="depth-content"><div class="depth-icon">🎯</div><div class="depth-name">Depth Card</div><div class="depth-info">Hover para ver el efecto de capas con preserve-3d</div></div>
+          </div>
+          <div class="depth-card">
+            <div class="depth-layer dl2"></div>
+            <div class="depth-layer dl1"></div>
+            <div class="depth-layer dl0"></div>
+            <div class="depth-content"><div class="depth-icon">💫</div><div class="depth-name">3D Layers</div><div class="depth-info">Capas con translateZ negativo crean profundidad real</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">44 — Multi-Layer Depth Card</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">preserve-3d</span>
+        <p class="fx-desc">Tres capas absolutas con translateZ negativo creciente. Al inclinar la tarjeta en hover (rotateY + rotateX), las capas se separan visualmente. Requiere transform-style:preserve-3d.</p>
+      </div>
+    </div>
+
+    <!-- FX 11 SVG DRAW -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="svg-draw-demo" id="svg-draw-demo">
+          <svg width="300" height="200" viewBox="0 0 300 200">
+            <path class="svg-path-anim" d="M20,100 Q75,20 150,100 Q225,180 280,100" fill="none" stroke="url(#svg-grad)" stroke-width="3" stroke-linecap="round"/>
+            <path class="svg-path-anim" d="M20,130 Q75,50 150,130 Q225,210 280,130" fill="none" stroke="rgba(255,45,85,0.5)" stroke-width="2" stroke-linecap="round" style="transition-delay:0.5s"/>
+            <path class="svg-path-anim" d="M20,70 Q75,-10 150,70 Q225,150 280,70" fill="none" stroke="rgba(0,229,255,0.5)" stroke-width="2" stroke-linecap="round" style="transition-delay:1s"/>
+            <defs><linearGradient id="svg-grad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#c8ff00"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs>
+          </svg>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">45 — SVG Path Draw</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">stroke-dashoffset</span>
+        <p class="fx-desc">SVG que "se dibuja" usando stroke-dasharray = getTotalLength() y animando dashoffset de ese valor a 0. JS mide el largo real del path con el método getTotalLength() del SVG.</p>
+      </div>
+    </div>
+
+    <!-- FX 25 COLOR PICKER -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="color-demo" id="color-demo">
+          <div class="color-preview" id="color-preview" style="color:#fff">PREVIEW</div>
+          <div class="color-controls">
+            <div class="color-row"><label>R</label><input type="range" min="0" max="255" value="139" id="cr"><span class="color-val" id="cr-v">139</span></div>
+            <div class="color-row"><label>G</label><input type="range" min="0" max="255" value="92"  id="cg"><span class="color-val" id="cg-v">92</span></div>
+            <div class="color-row"><label>B</label><input type="range" min="0" max="255" value="246" id="cb"><span class="color-val" id="cb-v">246</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">46 — Live Color Preview</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">input range</span>
+        <p class="fx-desc">Sliders RGB que actualizan el fondo en tiempo real. JS lee los tres valores y construye rgb(r,g,b). Muestra el contraste automático del texto (claro/oscuro) según la luminosidad del color.</p>
+      </div>
+    </div>
+
+    <!-- FX 19 CLIP PANELS -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="clip-demo" style="width:100%;height:100%">
+          <div class="clip-panel cp1"><div class="clip-bg"></div><div class="clip-label">VIOLET</div></div>
+          <div class="clip-panel cp2"><div class="clip-bg"></div><div class="clip-label">ROUGE</div></div>
+          <div class="clip-panel cp3"><div class="clip-bg"></div><div class="clip-label">TEAL</div></div>
+          <div class="clip-panel cp4"><div class="clip-bg"></div><div class="clip-label">ACID</div></div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">47 — Hover Reveal Panels</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">transform:scale</span>
+        <p class="fx-desc">Paneles en flex que revelan su contenido al hover escalando el background. El texto permanece mientras el fondo se expande. Simple pero efectivo para categorías o secciones.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════
+  CAPÍTULO 10 — FINISHING TOUCHES
+══════════════════════════════════════ -->
+<div class="divider-line"></div>
+<section id="ch10">
+<div class="chapter">
+  <div class="chapter-header">
+    <span class="chapter-num">CAP. 10</span>
+    <h2 class="chapter-title">FINISHING<br>TOUCHES</h2>
+  </div>
+  <p class="chapter-desc">Los detalles que separan lo bueno de lo extraordinario: neon glows, dynamic shadows, custom cursors. Pulir es tan importante como construir.</p>
+
+  <div class="fx-grid">
+    <!-- FX 21 NEON GLOW -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="glow-demo">
+          <button class="glow-btn gb-acid">ACID GLOW</button>
+          <button class="glow-btn gb-hot">HOT GLOW</button>
+          <button class="glow-btn gb-cyan">CYAN GLOW</button>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">48 — Neon Glow Buttons</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">box-shadow + blur</span>
+        <p class="fx-desc">Efecto neón usando el ::before con filter:blur y opacity 0→0.35 en hover. El glow no está en el box-shadow del botón mismo sino en un pseudo-elemento detrás con el mismo color.</p>
+      </div>
+    </div>
+
+    <!-- FX 50 DYNAMIC SHADOW -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="shadow-demo">
+          <div class="dyn-shadow ds1">🎨</div>
+          <div class="dyn-shadow ds2">⚡</div>
+          <div class="dyn-shadow ds3">🔥</div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">49 — Dynamic Colored Shadows</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">box-shadow transition</span>
+        <p class="fx-desc">Sombra que cambia de color y tamaño en hover. En reposo: sombra pequeña del color del gradiente. En hover: translateY(-8px) + sombra grande. Hace que el elemento "flote".</p>
+      </div>
+    </div>
+
+    <!-- FX CUSTOM CURSOR DEMO -->
+    <div class="fx-card">
+      <div class="fx-demo" style="background:#030308;flex-direction:column;gap:1rem;padding:2rem">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--muted);text-align:center">Cursor personalizado activo en toda la página</div>
+        <div style="display:flex;gap:1rem;justify-content:center">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--acid)"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--muted)">dot · tamaño fijo</div>
+        </div>
+        <div style="display:flex;gap:1rem;justify-content:center">
+          <div style="width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(200,255,0,0.5)"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--muted)">ring · expand en hover</div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--muted);text-align:center;margin-top:0.5rem">Haz hover en botones o cards para ver el efecto</div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">50 — Custom Cursor System</div>
+        <span class="fx-tag t-js">JS</span>
+        <span class="fx-tag">mousemove</span>
+        <p class="fx-desc">Sistema de cursor dual: dot pequeño que sigue exactamente el cursor (transition corto) + ring grande con lag (transition largo). body:has(a:hover) expande el ring con CSS puro.</p>
+      </div>
+    </div>
+
+    <!-- NOISE -->
+    <div class="fx-card">
+      <div class="fx-demo" style="padding:0">
+        <div class="noise-fx" style="width:100%;height:100%">
+          <div class="noise-content">
+            <div class="noise-title">Grain & Noise</div>
+            <div class="noise-sub">SVG inline · mix-blend-mode:overlay</div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">+ — Film Grain Texture</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">SVG feTurbulence</span>
+        <p class="fx-desc">Textura de grano usando SVG feTurbulence embebido como background-image en URL. mix-blend-mode:overlay lo integra al fondo sin eliminar los colores. Añade profundidad orgánica.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<div class="divider-line"></div>
+<footer>
+  <div class="footer-big">VISUAL<br>FX</div>
+  <p class="footer-sub">50 efectos · HTML · CSS · JavaScript · Edition 02</p>
+</footer>
+
+<!-- ══════════════════════════════════════════════
+   JAVASCRIPT
+══════════════════════════════════════════════ -->
+<script>
+// ── CUSTOM CURSOR ──
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + 'px';
+  dot.style.top = my + 'px';
+});
+(function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
+
+// ── PROGRESS BAR ──
+const pbar = document.getElementById('progress-bar');
+const scFill = document.getElementById('sc-fill-demo');
+const scPct = document.getElementById('sc-pct-demo');
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  pbar.style.width = pct + '%';
+  if (scFill) { scFill.style.width = pct.toFixed(0) + '%'; scPct.textContent = pct.toFixed(0) + '%'; }
+});
+
+// ── TOC ACTIVE ──
+const tocDots = document.querySelectorAll('.toc-dot');
+const chapters = ['hero','ch1','ch2','ch3','ch4','ch5','ch6','ch7','ch8','ch9','ch10'];
+window.addEventListener('scroll', () => {
+  let current = 0;
+  chapters.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < window.innerHeight * 0.5) current = i;
+  });
+  tocDots.forEach((d, i) => d.classList.toggle('active', i === current));
+});
+tocDots.forEach((d, i) => {
+  d.addEventListener('click', () => {
+    const el = document.getElementById(chapters[i]);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ── INTERSECTION OBSERVER base ──
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal-item').forEach(el => io.observe(el));
+
+// ── REVEAL BLUR ──
+const ioBlur = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.remove('blurred'); e.target.classList.add('visible'); ioBlur.unobserve(e.target); }});
+}, { threshold: 0.2 });
+document.querySelectorAll('.reveal-blur').forEach(el => { el.classList.add('blurred'); ioBlur.observe(el); });
+
+// ── STAGGER LIST ──
+const ioStagger = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.stagger-item, .reveal-stagger').forEach((item, i) => {
+        setTimeout(() => item.classList.add('visible'), i * 100);
+      });
+      ioStagger.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.stagger-list, .fx-card:has(.reveal-stagger)').forEach(el => ioStagger.observe(el));
+
+// ── STAGGER GRID ──
+const ioGrid = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.reveal-sg').forEach((cell, i) => {
+        cell.style.transitionDelay = (i * 30) + 'ms';
+        setTimeout(() => cell.classList.add('visible'), i * 30);
+      });
+      ioGrid.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('#sg-demo').forEach(el => ioGrid.observe(el));
+
+// ── HIGHLIGHT ON SCROLL ──
+const ioHl = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.reveal-hl').forEach((hl, i) => {
+        setTimeout(() => hl.classList.add('visible'), i * 300);
+      });
+      ioHl.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.fx-card:has(.reveal-hl)').forEach(el => ioHl.observe(el));
+
+// ── PARALLAX ──
+const plxBg = document.getElementById('plx-bg');
+const plxMid = document.getElementById('plx-mid');
+const plxFg = document.getElementById('plx-fg');
+const plxScene = document.getElementById('plx-scene');
+window.addEventListener('scroll', () => {
+  if (!plxScene) return;
+  const rect = plxScene.getBoundingClientRect();
+  if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+  const progress = -rect.top / window.innerHeight;
+  if (plxBg)  plxBg.style.transform  = `translateY(${progress * 30}px)`;
+  if (plxMid) plxMid.style.transform = `translateY(${progress * 15}px)`;
+  if (plxFg)  plxFg.style.transform  = `translateY(${progress * -10}px)`;
+});
+
+// ── SVG DRAW ──
+const svgDemo = document.getElementById('svg-draw-demo');
+const ioSvg = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); ioSvg.unobserve(e.target); }});
+}, { threshold: 0.3 });
+if (svgDemo) {
+  svgDemo.querySelectorAll('.svg-path-anim').forEach(p => {
+    const len = p.getTotalLength ? p.getTotalLength() : 1000;
+    p.style.strokeDasharray = len;
+    p.style.strokeDashoffset = len;
+  });
+  ioSvg.observe(svgDemo);
+  const ioSvg2 = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.svg-path-anim').forEach(p => { p.style.strokeDashoffset = '0'; });
+        ioSvg2.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  ioSvg2.observe(svgDemo);
+}
+
+// ── SCRAMBLE TEXT ──
+const scrambleEl = document.getElementById('scramble-el');
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+const originalText = scrambleEl ? scrambleEl.textContent : '';
+function scramble(el, text, duration = 1500) {
+  let start = null;
+  const revealed = Array(text.length).fill(false);
+  function frame(ts) {
+    if (!start) start = ts;
+    const progress = Math.min((ts - start) / duration, 1);
+    const numRevealed = Math.floor(progress * text.length);
+    let result = '';
+    for (let i = 0; i < text.length; i++) {
+      if (i < numRevealed || revealed[i]) { revealed[i] = true; result += text[i]; }
+      else result += chars[Math.floor(Math.random() * chars.length)];
+    }
+    el.textContent = result;
+    if (progress < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+if (scrambleEl) {
+  setInterval(() => scramble(scrambleEl, originalText, 1500), 3000);
+  scrambleEl.addEventListener('mouseenter', () => scramble(scrambleEl, originalText, 1200));
+}
+
+// ── TYPEWRITER MULTILINE ──
+function runTypewriters() {
+  const lines = document.querySelectorAll('#tw-container .tw-line');
+  let delay = 0;
+  lines.forEach((line, i) => {
+    const dur = parseFloat(line.style.getPropertyValue('--tw-dur')) * 1000 || 2000;
+    setTimeout(() => {
+      if (i > 0) lines[i-1].classList.replace('tw-active', 'tw-done');
+      line.classList.add('tw-active');
+    }, delay);
+    delay += dur + 200;
+  });
+  setTimeout(() => {
+    lines[lines.length - 1]?.classList.replace('tw-active', 'tw-done');
+    setTimeout(runTypewriters, 1000);
+  }, delay);
+}
+const ioTw = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { runTypewriters(); ioTw.unobserve(e.target); }});
+}, { threshold: 0.5 });
+const twContainer = document.getElementById('tw-container');
+if (twContainer) ioTw.observe(twContainer);
+
+// ── COUNTER ──
+function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const isFloat = el.dataset.float === 'true';
+  const duration = 2000;
+  let start = null;
+  function frame(ts) {
+    if (!start) start = ts;
+    const progress = Math.min((ts - start) / duration, 1);
+    const eased = easeOutQuart(progress);
+    const current = target * eased;
+    el.textContent = (isFloat ? current.toFixed(1) : Math.floor(current).toLocaleString()) + suffix;
+    if (progress < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+const ioCounter = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.counter-num').forEach(animateCounter);
+      ioCounter.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.counter-demo').forEach(el => ioCounter.observe(el));
+
+// ── TICKER ──
+function animateTicker(el) {
+  const to = parseFloat(el.dataset.to);
+  const from = parseFloat(el.dataset.from || '0');
+  const decimals = parseInt(el.dataset.decimals || '0');
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const duration = 2500;
+  let start = null;
+  function frame(ts) {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / duration, 1);
+    const e = 1 - Math.pow(1 - p, 5);
+    const val = from + (to - from) * e;
+    el.textContent = prefix + (decimals > 0 ? val.toFixed(decimals) : Math.floor(val).toLocaleString()) + suffix;
+    if (p < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+const ioTicker = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('[data-ticker]').forEach(animateTicker);
+      ioTicker.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.ticker-demo').forEach(el => ioTicker.observe(el));
+
+// ── SVG RADIAL PROGRESS ──
+const ioRadial = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.radial-fg-c').forEach(c => {
+        const pct = parseInt(c.dataset.pct) / 100;
+        const circ = 2 * Math.PI * 45;
+        c.style.strokeDasharray = circ;
+        c.style.strokeDashoffset = circ * (1 - pct);
+      });
+      ioRadial.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('#radial-demo').forEach(el => ioRadial.observe(el));
+
+// ── MAGNETIC BUTTONS ──
+document.querySelectorAll('.magnetic-btn').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const rect = btn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) * 0.35;
+    const dy = (e.clientY - cy) * 0.35;
+    btn.style.transform = `translate(${dx}px, ${dy}px)`;
+  });
+  btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+  btn.addEventListener('click', e => {
+    const ripple = document.createElement('span');
+    ripple.className = 'btn-ripple';
+    const r = Math.max(btn.offsetWidth, btn.offsetHeight) / 2;
+    const rect = btn.getBoundingClientRect();
+    ripple.style.cssText = `width:${r*2}px;height:${r*2}px;left:${e.clientX-rect.left-r}px;top:${e.clientY-rect.top-r}px`;
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 700);
+  });
+});
+
+// ── 3D TILT ──
+document.querySelectorAll('.tilt-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(1000px) rotateY(${x * 20}deg) rotateX(${-y * 20}deg) scale(1.02)`;
+  });
+  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+});
+
+// ── SPOTLIGHT ──
+const spotDemo = document.getElementById('spotlight-demo');
+const spotInner = document.getElementById('spotlight-inner');
+if (spotDemo) {
+  spotDemo.addEventListener('mousemove', e => {
+    const rect = spotDemo.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+    const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+    spotInner.style.background = `radial-gradient(circle 200px at ${x}% ${y}%, rgba(200,255,0,0.14) 0%, transparent 70%)`;
+  });
+}
+
+// ── FOLLOW LIGHT ──
+const followDemo = document.getElementById('follow-demo');
+const followLight = document.getElementById('follow-light');
+if (followDemo) {
+  followDemo.addEventListener('mousemove', e => {
+    const rect = followDemo.getBoundingClientRect();
+    followLight.style.left = (e.clientX - rect.left) + 'px';
+    followLight.style.top  = (e.clientY - rect.top) + 'px';
+  });
+}
+
+// ── RIPPLE ──
+['rip1','rip2'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('click', e => {
+    const ripple = document.createElement('div');
+    ripple.className = 'ripple-wave';
+    const size = Math.max(el.offsetWidth, el.offsetHeight) * 1.5;
+    const rect = el.getBoundingClientRect();
+    ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+    el.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 700);
+  });
+});
+
+// ── ACCORDION ──
+document.querySelectorAll('.acc-trigger').forEach(header => {
+  header.addEventListener('click', () => {
+    const item = header.closest('.acc-item');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// ── TABS ──
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const parent = btn.closest('.tab-demo');
+    const tab = btn.dataset.tab;
+    parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    parent.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    parent.querySelector(`[data-panel="${tab}"]`)?.classList.add('active');
+  });
+});
+
+// ── SLIDE PANEL ──
+const slideToggle = document.getElementById('slide-toggle');
+const slidePanel = document.getElementById('slide-panel');
+if (slideToggle && slidePanel) {
+  let open = false;
+  slideToggle.addEventListener('click', () => {
+    open = !open;
+    slidePanel.classList.toggle('open', open);
+    slideToggle.classList.toggle('shifted', open);
+    slideToggle.textContent = open ? '‹ CERRAR' : 'ABRIR ›';
+  });
+}
+
+// ── DRAG TO COMPARE ──
+const dragDemo = document.getElementById('drag-demo');
+const dragAfter = document.getElementById('drag-after');
+const dragHandle = document.getElementById('drag-handle');
+if (dragDemo) {
+  let dragging = false;
+  function setDrag(x) {
+    const rect = dragDemo.getBoundingClientRect();
+    const pct = Math.max(5, Math.min(95, (x - rect.left) / rect.width * 100));
+    dragHandle.style.left = pct + '%';
+    dragAfter.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+  }
+  dragHandle.addEventListener('mousedown', () => dragging = true);
+  dragDemo.addEventListener('mousemove', e => { if (dragging) setDrag(e.clientX); });
+  document.addEventListener('mouseup', () => dragging = false);
+  dragHandle.addEventListener('touchstart', e => { dragging = true; e.preventDefault(); });
+  dragDemo.addEventListener('touchmove', e => { if (dragging) setDrag(e.touches[0].clientX); });
+  document.addEventListener('touchend', () => dragging = false);
+}
+
+// ── COLOR PICKER ──
+const cr = document.getElementById('cr');
+const cg = document.getElementById('cg');
+const cb = document.getElementById('cb');
+const preview = document.getElementById('color-preview');
+function updateColor() {
+  if (!cr) return;
+  const r = cr.value, g = cg.value, b = cb.value;
+  document.getElementById('cr-v').textContent = r;
+  document.getElementById('cg-v').textContent = g;
+  document.getElementById('cb-v').textContent = b;
+  preview.style.background = `rgb(${r},${g},${b})`;
+  const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  preview.style.color = lum > 0.5 ? '#000' : '#fff';
+}
+[cr, cg, cb].forEach(s => s?.addEventListener('input', updateColor));
+updateColor();
+
+// ── PARTICLE CANVAS ──
+(function() {
+  const canvas = document.getElementById('particle-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.vx = (Math.random() - 0.5) * 0.8;
+      this.vy = (Math.random() - 0.5) * 0.8;
+      this.r = Math.random() * 2 + 1;
+      this.color = ['rgba(200,255,0,', 'rgba(0,229,255,', 'rgba(139,92,246,'][Math.floor(Math.random() * 3)];
+    }
+    update() {
+      this.x += this.vx; this.y += this.vy;
+      if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color + '0.8)';
+      ctx.fill();
+    }
+  }
+  for (let i = 0; i < 80; i++) particles.push(new Particle());
+  function loop() {
+    ctx.fillStyle = 'rgba(2,2,8,0.15)';
+    ctx.fillRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 80) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(200,255,0,${(1 - dist/80) * 0.2})`;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+// ── MOUSE TRAIL CANVAS ──
+(function() {
+  const canvas = document.getElementById('trail-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  const W = canvas.width, H = canvas.height;
+  let points = [];
+  const hues = [60, 180, 270, 0]; let hi = 0;
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    points.push({ x: e.clientX - rect.left, y: e.clientY - rect.top, life: 1, hue: hues[hi++ % 4] });
+  });
+  canvas.addEventListener('touchmove', e => {
+    const rect = canvas.getBoundingClientRect();
+    points.push({ x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top, life: 1, hue: hues[hi++ % 4] });
+    e.preventDefault();
+  }, { passive: false });
+  function loop() {
+    ctx.fillStyle = 'rgba(2,2,8,0.12)';
+    ctx.fillRect(0, 0, W, H);
+    points = points.filter(p => p.life > 0.02);
+    points.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.life * 8, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue},100%,60%,${p.life * 0.6})`;
+      ctx.fill();
+      p.life *= 0.93;
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+  // demo auto-motion
+  let t = 0;
+  function demoLoop() {
+    t += 0.04;
+    points.push({
+      x: W/2 + Math.sin(t) * 120 + Math.sin(t * 2.3) * 40,
+      y: H/2 + Math.cos(t * 0.7) * 60 + Math.cos(t * 1.7) * 30,
+      life: 1, hue: ((t * 40) % 360)
+    });
+    requestAnimationFrame(demoLoop);
+  }
+  demoLoop();
+})();
+
+// ── NAV scroll effect ──
+const navEl = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  navEl.style.background = window.scrollY > 50
+    ? 'rgba(8,8,16,0.9)'
+    : 'rgba(8,8,16,0.6)';
+});
+</script>
+</body>
+</html>

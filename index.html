@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portafolio Monreal 💻</title>
         <!--CEO-->
     <title>Portafolio Monreal 💻</title> <!-- define el título del documento, que se muestra en la pestaña del navegador o en CEO de Google-->
     <meta name="description" content="Portafolio de Monreal, desarrollador web y diseñador gráfico. Aquí encontrarás una selección de mis proyectos y experiencia en el campo del desarrollo web y diseño gráfico."> <!-- proporciona una descripción del contenido de la página para los motores de búsqueda -->
@@ -15,7 +14,7 @@
     <meta property="og:image" content="/images/imagen.jpg" alt="foto de monreal">
     <meta property="og:url" content="https://monreal.dev">
 
-    <link rel="stylesheet" href="/styles.css"> <!-- enlaza una hoja de estilo externa para aplicar estilos al documento -->
+    <link rel="stylesheet" href="/css/styles.css"> <!-- enlaza una hoja de estilo externa para aplicar estilos al documento -->
     
     <meta name="robots" content="index, follow"> <!-- indica a los motores de búsqueda que indexen la página y sigan los enlaces -->
     <meta name="theme-color" content="#09f"> <!-- define el color del tema para navegadores móviles -->
@@ -23,13 +22,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sekuya&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <header>
-        <h1>JOAQUIN MONREAL 💻</h1>
-        <p>Fullstack Developer | Junior Developer / Intern</p>
-    </header>
 
+<!-- ▓▓▓ HERO ▓▓▓ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <h1 class="hero-h1">
+      <span>Portafolio</span>
+      <em>JOAQUIN MONREAL 💻</em>
+    </h1>
+    <p class="hero-sub">Fullstack Developer | Junior Developer / Intern</p>
+  </div>
+</section>
   <p>
     +52 81-1170-4209 &bull;
     <a href="mailto:Joaquinomonreal@gmail.com">Joaquinomonreal@gmail.com</a> &bull;
@@ -51,6 +60,27 @@
   <hr>
  
   <h2>Key Achievements</h2>
+  <!-- HORIZONTAL SCROLL -->
+    <div class="fx-card" style="grid-column:span 1">
+      <div class="fx-demo" style="padding:0">
+        <div class="hscroll-wrap">
+          <div class="hscroll-track">
+            <div class="hscroll-card hc1"><div class="hc-bg"><p style="padding: 17px;">hola que tal</p></div><div class="hc-label"><div class="hc-num">01 / DESIGN</div><div class="hc-title">Glassmorphism</div></div></div>
+            <div class="hscroll-card hc2"><div class="hc-bg"><p style="padding: 17px;">hola que tal</p></div><div class="hc-label"><div class="hc-num">02 / MOTION</div><div class="hc-title">Parallax</div></div></div>
+            <div class="hscroll-card hc3"><div class="hc-bg"><p style="padding: 17px;">hola que tal</p></div><div class="hc-label"><div class="hc-num">03 / FX</div><div class="hc-title">Particles</div></div></div>
+            <div class="hscroll-card hc4"><div class="hc-bg"><p style="padding: 17px;">hola que tal</p></div><div class="hc-label"><div class="hc-num">04 / TEXT</div><div class="hc-title">Scramble</div></div></div>
+            <div class="hscroll-card hc5"><div class="hc-bg"><p style="padding: 17px;">hola que tal</p></div><div class="hc-label"><div class="hc-num">05 / GOLD</div><div class="hc-title">Dynamic FX</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="fx-info">
+        <div class="fx-name">36 — Horizontal Scroll Gallery</div>
+        <span class="fx-tag t-css">CSS</span>
+        <span class="fx-tag">scroll-snap</span>
+        <p class="fx-desc">Galería con scroll horizontal y snap. overflow-x:auto + scroll-snap-type:x mandatory en el track, scroll-snap-align:start en cada card. Drag to scroll en desktop.</p>
+      </div>
+    </div>
+
   <ul>
     <li>Built 2 data management tools (Excel + VBA) at Securitas that contributed to a <strong>$1.2M MXN increase in company revenue</strong> within the first 3 months of deployment.</li>
     <li>Led a team of <strong>7–10 people</strong> as Store Manager, overseeing payroll, inventory, vendor management, and local network operations.</li>

@@ -1,0 +1,108 @@
+:root {
+  --bg:       #262623;
+  --surface:  #0f0f1a;
+  --border:   rgba(255,255,255,0.07);
+  --text:     #fffff7;
+  --muted:    rgba(232,228,220,0.4);
+  --acid:     #c8ff00;
+  --hot:      #ff2d55;
+  --cyan:     #00e5ff;
+  --violet:   #8b5cf6;
+  --gold:     #f59e0b;
+  --coral:    #ff6b6b;
+  --mint:     #0fffe5;
+  --r: 0.75rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ══════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════ */
+#hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 120%, rgba(139,92,246,0.2), transparent),
+              radial-gradient(ellipse 60% 40% at 20% 50%, rgba(0,229,255,0.08), transparent),
+              radial-gradient(ellipse 50% 50% at 80% 30%, rgba(200,255,0,0.06), transparent);
+}
+.hero-content { position: relative; z-index: 2; text-align: center; }
+
+/* FX 41 — HORIZONTAL SCROLL SECTION */
+.hscroll-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.hscroll-track {
+  display: flex; gap: 1.5rem;
+  padding: 2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.hscroll-track::-webkit-scrollbar { display: none; }
+.hscroll-card {
+  flex-shrink: 0; width: 280px; height: 200px;
+  border-radius: 12px; border: 1px solid var(--border);
+  scroll-snap-align: start;
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 1.5rem;
+  position: relative; overflow: hidden;
+  cursor: grab; transition: transform 0.2s;
+}
+.hscroll-card:active { cursor: grabbing; }
+.hscroll-card:hover { transform: translateY(-4px); }
+.hc-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.4s;
+}
+.hscroll-card:hover .hc-bg { transform: scale(1.05); }
+.hc1 .hc-bg { background: linear-gradient(160deg,white,var(--violet)); }
+.hc2 .hc-bg { background: linear-gradient(160deg, white, var(--hot)); }
+.hc3 .hc-bg { background: linear-gradient(160deg, white, var(--cyan)); }
+.hc4 .hc-bg { background: linear-gradient(160deg, white, var(--acid)); }
+.hc5 .hc-bg { background: linear-gradient(160deg, white, var(--gold)); }
+.hc-label { position: relative; z-index:1; }
+.hc-num { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing:0.2em; }
+.hc-title { font-size: 1.1rem; font-weight: 700; margin-top: 0.2rem; }
+
+/* FX 42 — TAB SWITCHER */
+.tab-demo { background: #060612; }
+.tab-bar {
+  display: flex; border-bottom: 1px solid var(--border);
+  padding: 0 1.5rem;
+}
+.tab-btn {
+  padding: 1rem 1.25rem;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em;
+  cursor: pointer; color: var(--muted);
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  background: none; border-top: none; border-left: none; border-right: none;
+}
+.tab-btn.active { color: var(--acid); border-bottom-color: var(--acid); }
+.tab-panel { display: none; padding: 1.5rem; }
+.tab-panel.active { display: block; }
+.tab-content-item {
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+  border-radius: 6px; margin-bottom: 0.5rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--muted);
+}

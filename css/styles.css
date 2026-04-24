@@ -1,0 +1,122 @@
+/* ── RESET BÁSICO ──────────────────────────────────────────
+       Quita márgenes y padding por defecto del navegador.
+       box-sizing: border-box hace que padding y border
+       estén incluídos dentro del ancho/alto del elemento.   */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    align-content: center;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(50, 49, 49);
+}
+header{
+    font-size: 2.5em;
+    color: rgb(50, 49, 49);
+    text-align: center;
+    height: 100vh;
+    display: flex; /* Utiliza Flexbox para centrar el contenido */
+    flex-direction: column; /* Alinea los elementos en una columna */
+    justify-content: center; /* centra verticalmente */
+    align-items: center;     /* centra horizontalmente */
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+}
+
+
+details{
+    background-color: rgb(232, 232, 232);
+        padding: 10px;
+
+}
+
+summary{
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+section{
+    padding: 25px;
+    background-color: rgb(232, 232, 232);
+    margin: 20px;
+    border-radius: 10px;
+}
+
+/* FX 08 — STAGGER LIST */
+/* ── CONTENEDOR DE LA LISTA ────────────────────────────────
+       El <ul> que agrupa todos los items.
+       - list-style: none → quita los bullets
+       - flex + column → apila los items verticalmente
+       - gap → espacio entre cada item                       */
+.stagger-list {
+      list-style: none;
+      padding: 1.5rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 100%;
+}
+    /* ── CADA ITEM DE LA LISTA ─────────────────────────────────
+       Estado INICIAL antes de animarse:
+       - opacity: 0       → invisible
+       - translateX(-20px)→ desplazado 20px a la izquierda
+       
+       Cuando JS añada la clase .visible,
+       opacity y transform cambiarán y la
+       transición CSS hará la animación suave.              */
+.stagger-item {
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: rgb(255, 255, 255); /* fondo sutilmente blanco */
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+ 
+    /* ESTADO DE REPOSO: oculto y corrido a la izquierda */
+    opacity: 0;
+    transform: translateX(-20px);
+ 
+    /* VELOCIDAD DE LA ANIMACIÓN:
+         cuando cambie opacity o transform → 0.5s de transición
+         cuando cambie background (hover)  → 0.2s más rápido  */
+    transition: opacity 0.5s, transform 0.5s, background 0.2s;
+}
+ 
+    /* ── ESTADO VISIBLE ────────────────────────────────────────
+       JS añade esta clase a cada item con un delay escalonado.
+       Al aplicarse, CSS transiciona suavemente desde el
+       estado de reposo (oculto + corrido) al estado visible.  */
+.stagger-item.visible {
+      opacity: 1;
+      transform: none; /* vuelve a su posición original */
+}
+ 
+    /* ── HOVER DEL ITEM ────────────────────────────────────────
+       Aclara levemente el fondo al pasar el mouse.
+       La transición de background (0.2s) definida arriba
+       hace que este cambio también sea suave.               */
+.stagger-item:hover {
+      background: rgba(255, 255, 255, 0.596);
+      
+}
+ 
+/* ── ÍCONO (columna izquierda) ─────────────────────────── */
+.si-icon {
+    font-size: 1.3rem;
+}
+ 
+/* ── NOMBRE (columna del medio) ────────────────────────── */
+.si-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+.si-description {
+    font-size: 0.75rem;
+    color: rgb(100, 100, 100);
+    display: flex;
+    margin: 20px 0;
+}

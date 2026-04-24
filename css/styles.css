@@ -1,108 +1,122 @@
-:root {
-  --bg:       #262623;
-  --surface:  #0f0f1a;
-  --border:   rgba(255,255,255,0.07);
-  --text:     #fffff7;
-  --muted:    rgba(232,228,220,0.4);
-  --acid:     #c8ff00;
-  --hot:      #ff2d55;
-  --cyan:     #00e5ff;
-  --violet:   #8b5cf6;
-  --gold:     #f59e0b;
-  --coral:    #ff6b6b;
-  --mint:     #0fffe5;
-  --r: 0.75rem;
+/* ── RESET BÁSICO ──────────────────────────────────────────
+       Quita márgenes y padding por defecto del navegador.
+       box-sizing: border-box hace que padding y border
+       estén incluídos dentro del ancho/alto del elemento.   */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    align-content: center;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(50, 49, 49);
+}
+header{
+    font-size: 2.5em;
+    color: rgb(50, 49, 49);
+    text-align: center;
+    height: 100vh;
+    display: flex; /* Utiliza Flexbox para centrar el contenido */
+    flex-direction: column; /* Alinea los elementos en una columna */
+    justify-content: center; /* centra verticalmente */
+    align-items: center;     /* centra horizontalmente */
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Syne', sans-serif;
-  overflow-x: hidden;
-  position: relative;
+details{
+    background-color: rgb(232, 232, 232);
+        padding: 10px;
+
 }
 
-/* ══════════════════════════════════════════════
-   HERO
-══════════════════════════════════════════════ */
-#hero {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
+summary{
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1.1em;
 }
-.hero-bg {
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% 120%, rgba(139,92,246,0.2), transparent),
-              radial-gradient(ellipse 60% 40% at 20% 50%, rgba(0,229,255,0.08), transparent),
-              radial-gradient(ellipse 50% 50% at 80% 30%, rgba(200,255,0,0.06), transparent);
-}
-.hero-content { position: relative; z-index: 2; text-align: center; }
 
-/* FX 41 — HORIZONTAL SCROLL SECTION */
-.hscroll-wrap {
-  overflow: hidden;
-  position: relative;
+section{
+    padding: 25px;
+    background-color: rgb(232, 232, 232);
+    margin: 20px;
+    border-radius: 10px;
 }
-.hscroll-track {
-  display: flex; gap: 1.5rem;
-  padding: 2rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-.hscroll-track::-webkit-scrollbar { display: none; }
-.hscroll-card {
-  flex-shrink: 0; width: 280px; height: 200px;
-  border-radius: 12px; border: 1px solid var(--border);
-  scroll-snap-align: start;
-  display: flex; flex-direction: column;
-  justify-content: flex-end; padding: 1.5rem;
-  position: relative; overflow: hidden;
-  cursor: grab; transition: transform 0.2s;
-}
-.hscroll-card:active { cursor: grabbing; }
-.hscroll-card:hover { transform: translateY(-4px); }
-.hc-bg {
-  position: absolute; inset: 0;
-  transition: transform 0.4s;
-}
-.hscroll-card:hover .hc-bg { transform: scale(1.05); }
-.hc1 .hc-bg { background: linear-gradient(160deg,white,var(--violet)); }
-.hc2 .hc-bg { background: linear-gradient(160deg, white, var(--hot)); }
-.hc3 .hc-bg { background: linear-gradient(160deg, white, var(--cyan)); }
-.hc4 .hc-bg { background: linear-gradient(160deg, white, var(--acid)); }
-.hc5 .hc-bg { background: linear-gradient(160deg, white, var(--gold)); }
-.hc-label { position: relative; z-index:1; }
-.hc-num { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing:0.2em; }
-.hc-title { font-size: 1.1rem; font-weight: 700; margin-top: 0.2rem; }
 
-/* FX 42 — TAB SWITCHER */
-.tab-demo { background: #060612; }
-.tab-bar {
-  display: flex; border-bottom: 1px solid var(--border);
-  padding: 0 1.5rem;
+/* FX 08 — STAGGER LIST */
+/* ── CONTENEDOR DE LA LISTA ────────────────────────────────
+       El <ul> que agrupa todos los items.
+       - list-style: none → quita los bullets
+       - flex + column → apila los items verticalmente
+       - gap → espacio entre cada item                       */
+.stagger-list {
+      list-style: none;
+      padding: 1.5rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 100%;
 }
-.tab-btn {
-  padding: 1rem 1.25rem;
-  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em;
-  cursor: pointer; color: var(--muted);
-  border-bottom: 2px solid transparent;
-  transition: color 0.2s, border-color 0.2s;
-  background: none; border-top: none; border-left: none; border-right: none;
+    /* ── CADA ITEM DE LA LISTA ─────────────────────────────────
+       Estado INICIAL antes de animarse:
+       - opacity: 0       → invisible
+       - translateX(-20px)→ desplazado 20px a la izquierda
+       
+       Cuando JS añada la clase .visible,
+       opacity y transform cambiarán y la
+       transición CSS hará la animación suave.              */
+.stagger-item {
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: rgb(255, 255, 255); /* fondo sutilmente blanco */
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+ 
+    /* ESTADO DE REPOSO: oculto y corrido a la izquierda */
+    opacity: 0;
+    transform: translateX(-20px);
+ 
+    /* VELOCIDAD DE LA ANIMACIÓN:
+         cuando cambie opacity o transform → 0.5s de transición
+         cuando cambie background (hover)  → 0.2s más rápido  */
+    transition: opacity 0.5s, transform 0.5s, background 0.2s;
 }
-.tab-btn.active { color: var(--acid); border-bottom-color: var(--acid); }
-.tab-panel { display: none; padding: 1.5rem; }
-.tab-panel.active { display: block; }
-.tab-content-item {
-  padding: 0.75rem 1rem;
-  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-  border-radius: 6px; margin-bottom: 0.5rem;
-  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--muted);
+ 
+    /* ── ESTADO VISIBLE ────────────────────────────────────────
+       JS añade esta clase a cada item con un delay escalonado.
+       Al aplicarse, CSS transiciona suavemente desde el
+       estado de reposo (oculto + corrido) al estado visible.  */
+.stagger-item.visible {
+      opacity: 1;
+      transform: none; /* vuelve a su posición original */
+}
+ 
+    /* ── HOVER DEL ITEM ────────────────────────────────────────
+       Aclara levemente el fondo al pasar el mouse.
+       La transición de background (0.2s) definida arriba
+       hace que este cambio también sea suave.               */
+.stagger-item:hover {
+      background: rgba(255, 255, 255, 0.596);
+      
+}
+ 
+/* ── ÍCONO (columna izquierda) ─────────────────────────── */
+.si-icon {
+    font-size: 1.3rem;
+}
+ 
+/* ── NOMBRE (columna del medio) ────────────────────────── */
+.si-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+.si-description {
+    font-size: 0.75rem;
+    color: rgb(100, 100, 100);
+    display: flex;
+    margin: 20px 0;
 }

@@ -18,6 +18,7 @@ header{
     color: rgb(255, 255, 255);
     text-align: center;
     height: 100vh;
+    width: 100vw;
     display: flex; /* Utiliza Flexbox para centrar el contenido */
     flex-direction: column; /* Alinea los elementos en una columna */
     justify-content: center; /* centra verticalmente */
@@ -25,19 +26,6 @@ header{
     position: relative;
     overflow: hidden;
     padding: 20px;
-}
-
-
-details{
-    background-color: rgb(232, 232, 232);
-        padding: 10px;
-
-}
-
-summary{
-    padding: 10px;
-    cursor: pointer;
-    font-size: 1.1em;
 }
 
 section{
@@ -110,15 +98,15 @@ button{
       
 }
  
-.si-icon {
+.stagger-icon {
     font-size: 1.3rem;
 }
  
-.si-name {
+.stagger-name {
     font-size: 1.25rem;
     font-weight: 700;
 }
-.si-description {
+.stagger-description {
     font-size: 1rem;
     color: rgb(100, 100, 100);
     display: flex;
@@ -142,16 +130,15 @@ button{
     flex-direction: row;
     max-width: 100%;
 }
-.cuestionario div input:hover{
+input:hover{
     border-color: rgb(158, 63, 0);
     border-radius: 3px;
 }
-.cuestionario div input{
+input{
     height: 30px;
     width: 100%;
     border-radius: 4px;
     border-color: rgba(67, 67, 67, 0.192);
-    
 }
 textarea{
     height: 30px; 
@@ -161,6 +148,10 @@ textarea{
     resize: none; /* el usuario no puede ajustar manualmente */
     overflow: hidden;
     min-height: 40px;
+}
+textarea:hover{
+    border-color: rgb(158, 63, 0);
+    border-radius: 3px;
 }
 #footer-logo{
     width: 150px; height: auto; 
